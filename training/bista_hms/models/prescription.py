@@ -20,8 +20,6 @@ class HmsPrescription(models.Model):
     total_amount = fields.Float(string="Total Amount", compute='_compute_total_amount')
     delivery_ids = fields.One2many('stock.picking', 'prescription_id', string="Delivery Ids")
     delivery_count = fields.Integer(string="Delivery", compute='_compute_delivery_count', default=0, store=True)
-    raw_quantity = fields.Integer()
-
 
     def action_create_invoice(self):
         if not self.prescription_lines:
