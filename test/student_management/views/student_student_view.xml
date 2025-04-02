@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <record id="student_student_form_view" model="ir.ui.view">
+        <field name="name">student_student_form_view</field>
+        <field name="model">res.student</field>
+        <field name="arch" type="xml">
+            <form string="Students">
+                <header>
+                    <button name="action_block" string="Block" type="object"
+                              invisible="is_blocked == 1" class="btn-primary"/>
+                    <button name="action_unblock" string="Unblock" type="object"
+                              invisible="is_blocked == 0" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="registration_code"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Student Details">
+                            <field name="registration_date"/>
+                            <field name="name"/>
+                            <field name="standard"/>
+                        </group>
+                        <group string="Personal Details">
+                            <field name="dob"/>
+                            <field name="age"/>
+                            <field name="phone"/>
+                            <field name="email"/>
+                        </group>
+                        <group string="Other Details">
+                            <field name="tuition_fee" domain="[('standard','=', standard)] "/>
+                            <field name="is_blocked" />
+                            <field name="is_expired" />
+                        </group>
+                        <group string="Student Gaurdian Details">
+                            <field name="gaurdian_name" required = "age_category in ['minor']" invisible="age_category != 'minor'"/>
+                            <field name="gaurdian_phone" required = "age_category in ['minor']" invisible="age_category != 'minor'"/>
+                        </group>
+                        <notebook>
+                            <page string="Previous Year Marks">
+                                <field name="previous_mark_ids">
+                                    <list editable="bottom">
+                                        <field name="subject_id"/>
+                                        <field name="total_marks"/>
+                                        <field name="exam_marks"/>
+                                        <field name="viva_marks"/>
+                                        <field name="total_obtained_marks"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="student_student_list_view" model="ir.ui.view">
+        <field name="name">student_student_list_view</field>
+        <field name="model">res.student</field>
+        <field name="arch" type="xml">
+            <list string="Students">
+                <field name="registration_date"/>
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <field name="standard"/>
+                <field name="is_blocked"/>
+                <field name="is_expired"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_student_student" model="ir.actions.act_window">
+        <field name="name">Student</field>
+        <field name="res_model">res.student</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_student_management" name="Student Management"/>
+    <menuitem id="menu_student_student" name="Student" parent="menu_student_management" action="action_student_student"/>
+
+</odoo>

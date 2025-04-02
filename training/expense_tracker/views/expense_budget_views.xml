@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+
+<odoo>
+    <record id="view_expense_budget_form" model="ir.ui.view">
+        <field name="name">expense.budget.form</field>
+        <field name="model">expense.budget</field>
+        <field name="arch" type="xml">
+            <form string="Expense Budget">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="month" widget="selection"/>
+                        <field name="year"/>
+                        <field name="category_id"/>
+                        <field name="budget_limit"/>
+                    </group>
+                    <group string="Transactions">
+                        <field name="transaction_ids">
+                            <list editable="bottom">
+                                <field name="name"/>
+                                <field name="amount" widget="monetary"/>
+                                <field name="date"/>
+                                <field name="payment_method"/>
+                            </list>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="expense_budget_action" model="ir.actions.act_window">
+        <field name="name">Expense Budgets</field>
+        <field name="res_model">expense.budget</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="expense_sub_root_menu3" name="Expense Budget" parent="expense_root_menu" action="expense_budget_action"/>
+
+</odoo>
+

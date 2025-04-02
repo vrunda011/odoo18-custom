@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+expense_tracker.access_expense_tracker,access_expense_tracker,expense_tracker.model_expense_tracker,,1,1,1,1
+expense_tracker.access_expense_category,access_expense_category,expense_tracker.model_expense_category,,1,1,1,1
+expense_tracker.access_expense_budget,access_expense_budget,expense_tracker.model_expense_budget,,1,1,1,1
+expense_tracker.access_expense_line,access_expense_line,expense_tracker.model_expense_line,,1,1,1,1
+expense_tracker.access_expense_quick_wizard,access_expense_quick_wizard,expense_tracker.model_expense_quick_wizard,,1,1,1,1

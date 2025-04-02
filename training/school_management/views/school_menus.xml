@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<odoo>
+    <menuitem id="student_root_menu" name="School Details">
+        <menuitem id="student_sub_root_menu" name="Student">
+            <menuitem id="student_third_level_menu1" name="Student List" action="student_action"/>
+            <menuitem id="student_third_level_menu2" name="Student Marks" action="student_action"/>
+        </menuitem>
+    </menuitem>
+</odoo>

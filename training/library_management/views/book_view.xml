@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <record id="book_form_view" model="ir.ui.view">
+        <field name="name">library.book.form</field>
+        <field name="model">library.book</field>
+        <field name="arch" type="xml">
+            <form string="Book">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="book_code"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Book details">
+                            <field name="name"/>
+                            <field name="author_id"/>
+                            <field name="category"/>
+                            <field name="published_date"/>
+                        </group>
+                        <group string="Other details">
+                            <field name="copies"/>
+                        </group>
+                        <notebook string="Rental Books">
+                            <page string="Rentals">
+                                <field name="rental_ids">
+                                    <list editable="bottom">
+                                        <field name="borrower_id"/>
+                                        <field name="rental_date"/>
+                                        <field name="return_date"/>
+                                        <field name="state"/>
+                                        <field name="due_date"/>
+                                        <field name="late_fee"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="book_list_view" model="ir.ui.view">
+        <field name="name">library.book.list</field>
+        <field name="model">library.book</field>
+        <field name="arch" type="xml">
+            <list string="Books">
+                <field name="name"/>
+                <field name="author_id"/>
+                <field name="category"/>
+                <field name="published_date"/>
+                <field name="copies"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_library_book" model="ir.actions.act_window">
+        <field name="name">Books</field>
+        <field name="res_model">library.book</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="main_menu_library" name="Library"/>
+    <menuitem id="sub_menu_library" name="Books" parent="main_menu_library" action="action_library_book"/>
+</odoo>

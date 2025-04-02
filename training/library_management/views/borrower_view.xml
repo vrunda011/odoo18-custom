@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <record id="book_borrower_form_view" model="ir.ui.view">
+        <field name="name">library.borrower.form</field>
+        <field name="model">library.borrower</field>
+        <field name="arch" type="xml">
+            <form string="Book">
+                <sheet>
+                    <group>
+                        <group string="Book Borrower details">
+                            <field name="name"/>
+                            <field name="phone"/>
+                            <field name="email"/>
+                            <field name="address"/>
+                        </group>
+                        <group string="Other details">
+                            <field name="member_since"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="book_borrower_list_view" model="ir.ui.view">
+        <field name="name">library.borrower.list</field>
+        <field name="model">library.borrower</field>
+        <field name="arch" type="xml">
+            <list string="Book Borrower">
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <field name="address"/>
+                <field name="member_since"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_library_book_borrower" model="ir.actions.act_window">
+        <field name="name">Book Borrower</field>
+        <field name="res_model">library.borrower</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="sub_menu_library_borrower" name="Book Borrower" parent="main_menu_library" action="action_library_book_borrower"/>
+</odoo>

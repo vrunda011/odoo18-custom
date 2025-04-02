@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<odoo>
+    <record id="expense_quick_wizard_wizard" model="ir.ui.view">
+        <field name="name">expense.quick.wizard.wizard</field>
+        <field name="model">expense.quick.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Quick Expense Entry">
+                <group>
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="amount"/>
+                    <field name="category_id"/>
+                </group>
+            </form>
+        </field>
+    </record>
+</odoo>

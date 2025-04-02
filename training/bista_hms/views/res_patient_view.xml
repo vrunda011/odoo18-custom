@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <record id="view_res_patient_form" model="ir.ui.view">
+        <field name="name">res.patient.form</field>
+        <field name="model">res.patient</field>
+        <field name="arch" type="xml">
+            <form string="Patient">
+                <header>
+                    <button name="action_open_appointments" string="Appointments" type="object" />
+                    <button name="action_calculate_age" string="Calculate Age" type="object" />
+                    <button name="create_prescription" string="Create Prescription" type="object"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_open_appointments" class="oe_stat_button" icon="fa-solid fa-calendar">
+                                <field string="Appointments" name="appointment_count" widget="statinfo"/>
+                        </button>
+                        <button type="object" name="action_open_prescription" class="oe_stat_button" icon="fa-solid fa-list">
+                                <field string="Prescriptions" name="prescription_count" widget="statinfo"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="patient_code" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Patient Information">
+                            <field name="name"/>
+                            <field name="phone"/>
+                            <field name="email"/>
+                            <field name="partner_id"/>
+                        </group>
+                        <group string="Other Information">
+                            <field name="blood_group"/>
+                            <field name="date_of_birth"/>
+                            <field name="age"/>
+                            <field name="age_category"/>
+                        </group>
+                        <group string = "Guardian Information">
+                            <field name="guardian_type" required = "age_category in ['child', 'minor']"/>
+                            <field name="guardian_id" required = "age_category in ['child', 'minor']"/>
+                        </group>
+                        <group string = "Medical Information">
+                            <field name="previous_diseases" />
+                            <field name="weekly_visit" />
+                        </group>
+
+                        <notebook>
+                            <page string="Appointments">
+                                <field name="appointment_ids">
+                                    <list editable="bottom">
+                                        <field name="appointment_date"/>
+                                        <field name="state"/>
+                                        <field name="total_consultation_time"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_res_patient_list" model="ir.ui.view">
+        <field name="name">res.patient.list</field>
+        <field name="model">res.patient</field>
+        <field name="arch" type="xml">
+            <list string="Patients">
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <field name="blood_group"/>
+                <field name="date_of_birth"/>
+                <field name="age"/>
+                <field name="previous_diseases"/>
+                <field name="weekly_visit" />
+            </list>
+        </field>
+    </record>
+
+    <record id="action_res_patient" model="ir.actions.act_window">
+        <field name="name">Patients</field>
+        <field name="res_model">res.patient</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_bista_hms" name="HMS"/>
+    <menuitem id="menu_res_patient_sub" name="Patients" parent="menu_bista_hms" action="action_res_patient"/>
+
+</odoo>

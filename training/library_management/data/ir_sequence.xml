@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo noupdate="1">
+    <record id="sequence_library_book" model="ir.sequence">
+        <field name="name">Library Book Reference Numbers</field>
+        <field name="code">library.book</field>
+        <field name="prefix">LIB-</field>
+        <field name="padding">4</field>
+    </record>
+
+    <record id="sequence_library_book_rental" model="ir.sequence">
+        <field name="name">Library Book Rental Reference</field>
+        <field name="code">library.rental</field>
+        <field name="prefix">RENT-</field>
+        <field name="padding">4</field>
+    </record>
+</odoo>

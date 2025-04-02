@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<odoo>
+    <record id="expense_list_view" model="ir.ui.view">
+        <field name="name">expense.list.view</field>
+        <field name="model">expense.tracker</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="date"/>
+                <field name="amount" widget="monetary"/>
+                <field name="type" widget="statusbar"/>
+                <field name="budget_id"/>
+                <field name="currency_id"/>
+                <field name="category_id"/>
+                <field name="payment_method"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="expense_form_view" model="ir.ui.view">
+        <field name="name">expense.form.view</field>
+        <field name="model">expense.tracker</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_quick_expense_wizard"
+                            string="Quick Expense Wizard"
+                            type="object"
+                            class="btn-primary"/>
+                </header>
+                <sheet>
+                    <group string="Basic Information">
+                        <field name="name"/>
+                        <field name="date"/>
+                    </group>
+
+                    <notebook>
+                        <page string="Expense Details">
+                            <group>
+                                <field name="amount"/>
+                                <field name="currency_id"/>
+                                <field name="type"/>
+                                <field name="category_id"/>
+                                <field name="budget_id"/>
+                                <field name="payment_method"/>
+                            </group>
+                        </page>
+
+                        <page string="Expense Lines">
+                            <field name="expense_line_ids">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="amount"/>
+                                    <field name="category_id"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <page string="Users">
+                            <group>
+                                <field name="users_ids" widget="many2many_tags"/>
+                                <field name="managers_ids" widget="many2many_tags"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="expense_action" model="ir.actions.act_window">
+        <field name="name">Expenses</field>
+        <field name="res_model">expense.tracker</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="expense_root_menu" name="Expense Tracker"/>
+    <menuitem id="expense_sub_root_menu" name="My Expenses" parent="expense_root_menu" action="expense_action"/>
+
+</odoo>
