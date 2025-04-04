@@ -1,5 +1,5 @@
 from odoo import api, fields, models
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, UserError
 from datetime import datetime, timedelta
 
 
@@ -33,7 +33,6 @@ class HmsAppointment(models.Model):
     total_consultation_time = fields.Float(string="Total Consultation Time (Minutes)", readonly=True)
 
     service_product_id = fields.Many2one('product.product', string="Service", domain=[('type', '=', 'service')])
-
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -101,6 +100,13 @@ class HmsAppointment(models.Model):
 
     def action_cancel(self):
         self.state = 'cancel'
+
+    def action_send_mail_appointment(self):
+        template_id = self.env.ref('bista_hms.email_template_appointment_confirm')
+        if template_id:
+            template_id.send_mail(self.id, force_send=True)
+        else:
+            raise UserError("Mail Template not found. Please check the template.")
 
     def _send_appointment_reminder_today(self):
         # Send appointment reminder to patients
@@ -180,4 +186,22 @@ class HmsAppointment(models.Model):
     # def _compute_display_name(self):
     #     print(self._context)
 
+    def _send_mail_schedule(self):
+        template_id = self.env.ref('bista_hms.email_template_appointments_tomorrow')
+        if template_id:
+            template_id.send_mail(self.id, force_send=True)
+        else:
+            raise UserError("Mail Template not found. Please check the template.")
 
+    def get_next_day_appointments(self):
+        today = fields.Datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        next_day = today + timedelta(days=1)
+        end_day = next_day.replace(hour=23, minute=59, second=59, microsecond=999999)
+
+        next_day_appointments = self.env['hms.appointment'].search([
+            ('state', '=', 'confirm'),
+            ('appointment_date', '>=', next_day),
+            ('appointment_date', '<=', end_day)
+        ])
+
+        return next_day_appointments

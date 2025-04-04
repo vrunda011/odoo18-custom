@@ -13,6 +13,8 @@
                             invisible="state != 'confirm'" class="btn-primary"/>
                     <button name="action_done" string="Done" type="object"
                             invisible="state != 'in_consultation'" class="btn-primary"/>
+                    <button name="action_send_mail_appointment" string="Send Email" type="object"
+                            invisible="state != 'confirm'" class="btn-primary"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,in_consultation,confirm,done"/>
                 </header>
                 <sheet>

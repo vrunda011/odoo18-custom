@@ -29,7 +29,7 @@
                             <page string="Prescriptions">
                                 <field name="prescription_lines">
                                     <list editable="bottom">
-                                        <field name="product_id"/>
+                                        <field name="product_id" domain="['|',('type', '!=', 'service'),('list_price', '&gt;=', 100)]"/>
                                         <field name="quantity"/>
                                         <field name="delivered_qty"/>
                                         <field name="price_unit" readonly="1"/>

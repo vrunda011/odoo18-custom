@@ -1,0 +1,76 @@
+<odoo>
+    <record id="email_template_appointment_confirm" model="mail.template">
+        <field name="name">Appointment Confirmation</field>
+        <field name="model_id" ref="bista_hms.model_hms_appointment"/>
+        <field name="email_from">{{ object.env.user.email }}</field>
+        <field name="email_to">{{ object.env.user.email }}</field>
+        <field name="subject">Appointment Confirmation: {{ object.patient_id.name }}</field>
+        <field name="body_html" type="html">
+            <strong> <p >Hello <t t-out="object.patient_id.name"/> </p></strong>
+
+            <p>Your time of appointment is on <t t-out="object.appointment_date"/>.</p>
+            <p>We are pleased to confirm your appointment with Darshan</p>
+            <p>If you have any questions or need to reschedule, please contact us.</p>
+
+            <p>Thank you!</p>
+            <p>Best regards,</p>
+        </field>
+    </record>
+
+    <record id="email_template_appointments_tomorrow"  model="mail.template">
+        <field name="name">Next Day Appointments</field>
+        <field name="model_id" ref="bista_hms.model_hms_appointment"/>
+        <field name="email_from">{{ object.env.user.email }}</field>
+        <field name="email_to">{{ object.env.user.email }}</field>
+        <field name="subject">Next Day Appointments</field>
+        <field name="body_html" type="html">
+            <div style="font-family: Arial, sans-serif; font-size: 14px; color: #333;">
+                <p>Dear
+                    <strong>
+                        <t t-out="object.env.user.email"/>
+                    </strong>
+                </p>
+                <p>
+                    Please find the details of tomorrow's appointment below:
+                </p>
+                <table style="border: 1px solid #ddd; border-collapse: collapse; width: 100%; margin-top: 10px;">
+                        <thead>
+                            <tr style="background-color: #f2f2f2; text-align: left;">
+                                <th style="border: 1px solid #ddd; padding: 8px;">Appointment Number</th>
+                                <th style="border: 1px solid #ddd; padding: 8px;">Name</th>
+                                <th style="border: 1px solid #ddd; padding: 8px;">Date</th>
+                                <th style="border: 1px solid #ddd; padding: 8px;">Reason</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="object.get_next_day_appointments()" t-as="line">
+                                <tr>
+                                    <td style="border: 1px solid #ddd; padding: 8px;">
+                                        <t t-out="line.appointment_code"/>
+                                    </td>
+                                    <td style="border: 1px solid #ddd; padding: 8px;">
+                                        <t t-out="line.patient_id.name"/>
+                                    </td>
+                                    <td style="border: 1px solid #ddd; padding: 8px;">
+                                        <t t-out="line.appointment_date"/>
+                                    </td>
+                                    <td style="border: 1px solid #ddd; padding: 8px;">
+                                        <t t-out="line.appointment_reason"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    <p>
+                        Please feel free to contact us if you have any questions.
+                    </p>
+                    <p>Best Regards,</p>
+                    <p>
+                        <strong>
+                            <t t-out="object.env.user.company_id.name"/>
+                        </strong>
+                    </p>
+                </div>
+        </field>
+    </record>
+</odoo>

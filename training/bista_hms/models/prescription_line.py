@@ -10,7 +10,7 @@ class PrescriptionLine(models.Model):
     quantity = fields.Integer(string='Quantity', default=1)
     price_unit = fields.Float(string='Unit Price', compute='_compute_price_unit', store=True)
     total = fields.Float(string='Total', compute='_compute_total', store=True)
-    delivery_line_ids = fields.One2many('stock.move', 'prescription_line_id', string='Line Id')
+    move_ids = fields.One2many('stock.move', 'prescription_line_id', string='Line Id')
     delivered_qty = fields.Integer(string="Delivered Quantity", compute="_compute_delivered_quantity", store=True)
 
     # def write(self, vals):
@@ -23,7 +23,7 @@ class PrescriptionLine(models.Model):
     @api.constrains('quantity')
     def _check_quantity_increase(self):
         for line in self:
-            delivered_qty = sum(line.delivery_line_ids.mapped('product_uom_qty'))
+            delivered_qty = sum(line.move_ids.mapped('product_uom_qty'))
             if line.quantity < delivered_qty:
                 raise ValidationError("You cannot decrease the quantity below the already delivered quantity.")
 
@@ -40,7 +40,7 @@ class PrescriptionLine(models.Model):
         for line in self:
             line.total = line.quantity * line.price_unit
 
-    @api.depends('delivery_line_ids.state')
+    @api.depends('move_ids.state')
     def _compute_delivered_quantity(self):
         for line in self:
-            line.delivered_qty = sum(line.delivery_line_ids.mapped(lambda record: record.quantity if record.state=='done' else 0))
+            line.delivered_qty = sum(line.move_ids.mapped(lambda record: record.quantity if record.state=='done' else 0))

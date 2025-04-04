@@ -14,12 +14,20 @@ class HmsPrescription(models.Model):
     state = fields.Selection([('draft','Draft'),
                               ('confirmed','Confirmed'),
                               ('canceled','Canceled')
-                              ], string='State', default='draft')
+                              ], string='State')
 
     prescription_lines = fields.One2many("prescription.line", "prescription_id", string="Prescription Lines")
     total_amount = fields.Float(string="Total Amount", compute='_compute_total_amount')
     delivery_ids = fields.One2many('stock.picking', 'prescription_id', string="Delivery Ids")
-    delivery_count = fields.Integer(string="Delivery", compute='_compute_delivery_count', default=0, store=True)
+    delivery_count = fields.Integer(string="Delivery", compute='_compute_delivery_count', store=True)
+
+    @api.model
+    def default_get(self, fields_list):
+        res = super(HmsPrescription, self).default_get(fields_list)
+        res['date'] = fields.Date.context_today(self)
+        res['state'] ='draft'
+        res['delivery_count'] = 0
+        return res
 
     def action_create_invoice(self):
         if not self.prescription_lines:
@@ -81,7 +89,7 @@ class HmsPrescription(models.Model):
     def prepare_delivery_line_vals(self, stock_picking_id):
         line_vals_list = []
         for line in self.prescription_lines:
-            delivered_qty = sum(line.delivery_line_ids.mapped('product_uom_qty'))
+            delivered_qty = sum(line.move_ids.mapped('product_uom_qty'))
             remaining_qty = line.quantity - delivered_qty
 
             if remaining_qty>0:

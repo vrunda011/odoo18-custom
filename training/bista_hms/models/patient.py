@@ -47,6 +47,21 @@ class ResPatient(models.Model):
 
     partner_id = fields.Many2one("res.partner", string="Partner")
 
+    @api.model
+    def name_search(self, name='', args=None, operator='ilike', limit=100):
+        if not args:
+            args = []
+        if name:
+            domain = ['|', ('name', operator, name), ('phone', operator, name)]
+            args.extend(domain)
+            # records = self.sudo().search(args, limit=limit)
+            # records.fetch(['display_name'])
+            # return [(record.id, record.display_name) for record in records]
+        else:
+            return super().name_search(name, args, operator, limit)
+        patient_ids = self.search_fetch(args, ['phone'], limit=limit)
+        return [(patient_id.id, patient_id.display_name) for patient_id in patient_ids.sudo()]
+
     @api.depends('patient_code', 'name')
     def _compute_display_name(self):
         for rec in self:
