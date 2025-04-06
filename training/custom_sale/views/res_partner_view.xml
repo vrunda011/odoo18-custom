@@ -6,11 +6,20 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
+            <field name="category_id" position="after">
+                <field name="use_customers_tc"/>
+            </field>
+            <xpath expr="//notebook/page[@name='internal_notes']" position="after">
+                <page name="terms_conditions_page" string="Terms and Conditions">
+                    <field name="tc" placeholder="Terms and Conditions..."/>
+                </page>
+            </xpath>
             <xpath expr="//page[2]/group[1]" position="before">
                 <group string="Extra Discount">
                     <field name="extra_discount"/>
                 </group>
             </xpath>
+
         </field>
     </record>
 </odoo>

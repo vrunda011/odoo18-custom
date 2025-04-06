@@ -66,15 +66,11 @@ class HmsAppointment(models.Model):
             if existing_appointment:
                 raise ValidationError("A patient cannot have multiple appointments on the same day!")
 
-    def unlink(self):
-        # for rec in self:
-        #     if rec.state not in ['draft', 'cancel']:
-        #         raise ValidationError("You can not delete a record which is not in draft or cancel state")
-        #
-        check_ids = self.filtered(lambda s: s.state not in ['draft', 'cancel'])
-        if check_ids:
-            raise ValidationError("You can not delete a record which is not in draft or cancel state")
-        return super(HmsAppointment, self).unlink()
+    # def unlink(self):
+    #     check_ids = self.filtered(lambda s: s.state not in ['draft', 'cancel'])
+    #     if check_ids:
+    #         raise ValidationError("You can not delete a record which is not in draft or cancel state")
+    #     return super(HmsAppointment, self).unlink()
 
     def action_confirm(self):
         self.state = 'confirm'

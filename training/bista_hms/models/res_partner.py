@@ -8,7 +8,7 @@ class ResPartner(models.Model):
         if self.env.context.get('prevent_recursive_write'):
             return super(ResPartner, self).write(vals)
         for rec in self:
-            patient_record = self.env['res.patient'].search([('partner_id', '=', self.id)])
+            patient_record = self.env['res.patient'].search([('partner_id', '=', rec.id)])
             if patient_record.partner_id:
                 patient_vals = {}
                 if 'name' in vals:
