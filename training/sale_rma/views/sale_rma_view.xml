@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <record id="view_sale_rma_form" model="ir.ui.view">
+        <field name="name">sale.rma.form</field>
+        <field name="model">sale.rma</field>
+        <field name="arch" type="xml">
+            <form string="Sale RMA">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="rma_code" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Return Product Information">
+                            <field name="team_id"/>
+                            <field name="date"/>
+                            <field name="so_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sale_rma_list" model="ir.ui.view">
+        <field name="name">sale.rma.list</field>
+        <field name="model">sale.rma</field>
+        <field name="arch" type="xml">
+            <list string="Sale RMAs">
+                <field name="rma_code"/>
+                <field name="team_id"/>
+                <field name="so_id"/>
+                <field name="date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sale_rma" model="ir.actions.act_window">
+        <field name="name">Sale RMA</field>
+        <field name="res_model">sale.rma</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_sale_rma" name="Sale RMA"/>
+    <menuitem id="menu_sale_rma_sub" name="RMA records" parent="menu_sale_rma" action="action_sale_rma"/>
+
+</odoo>
