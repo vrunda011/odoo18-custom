@@ -18,7 +18,7 @@
         </field>
     </record>
 
-    <record id="view_sale_rma_list" model="ir.ui.view">
+    <record id="view_rma_team_list" model="ir.ui.view">
         <field name="name">rma.team.list</field>
         <field name="model">rma.team</field>
         <field name="arch" type="xml">

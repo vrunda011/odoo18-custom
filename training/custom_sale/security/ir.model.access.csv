@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+custom_sale.access_update_qty_wizard,access_update_qty_wizard,custom_sale.model_update_qty_wizard,,1,1,1,1

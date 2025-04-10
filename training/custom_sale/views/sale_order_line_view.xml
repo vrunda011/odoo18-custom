@@ -6,22 +6,26 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-<!--            <xpath expr="//field[@name='order_line']//list/field[@name='product_uom_qty']" position="after">-->
-<!--                <field name="available_qty_wh"/>-->
-<!--            </xpath>-->
-<!--            <xpath expr="//field[@name='order_line']//list/field[@name='available_qty_wh']" position="after">-->
-<!--                <field name="location_ids"/>-->
-<!--            </xpath>-->
-<!--            <xpath expr="//field[@name='order_line']//list/field[@name='location_ids']" position="after">-->
-<!--                <field name="available_qty_loc"/>-->
-<!--            </xpath>-->
-
             <xpath expr="//field[@name='order_line']//list/field[@name='product_uom_qty']" position="after">
+                <field name="available_qty_wh"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//list/field[@name='available_qty_wh']" position="after">
+                <field name="wh_location_ids"  widget="many2many_tags"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//list/field[@name='wh_location_ids']" position="after">
+                <field name="available_qty_loc"/>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']//list/field[@name='available_qty_loc']" position="after">
                 <field name="extra_note"/>
             </xpath>
 
             <xpath expr="//field[@name='order_line']//list/field[@name='price_unit']" position="after">
                 <field name="previous_price"/>
+            </xpath>
+
+            <xpath expr="//field[@name='note']" position="after">
+                <field name="amount_to_words"/>
             </xpath>
         </field>
     </record>

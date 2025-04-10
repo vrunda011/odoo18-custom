@@ -9,6 +9,8 @@ class SaleRMA(models.Model):
     date = fields.Date(default=fields.Date.today)
     so_id = fields.Many2one('sale.order', string='Sale Order')
 
+    rma_line_ids = fields.One2many('rma.lines','rma_line_id', string="RMA Lines")
+
     @api.model_create_multi
     def create(self, vals_list):
         for rec in vals_list:
@@ -27,3 +29,31 @@ class SaleRMA(models.Model):
                     })
                 rec['rma_code'] = self.env['ir.sequence'].next_by_code(seq_code)
         return super(SaleRMA, self).create(vals_list)
+
+    @api.onchange('so_id')
+    def onchange_sale_order(self):
+        if self.so_id:
+            rma_lines = []
+            rma_lines = [(5, 0, 0)]
+            for line in self.so_id.order_line:
+                rma_lines.append((0, 0, {
+                    'product_id': line.product_id.id,
+                    'qty': line.product_uom_qty,
+                    'price': line.price_unit,
+                }))
+            self.rma_line_ids = rma_lines
+
+    def action_rma_wizard(self):
+        view_id = self.env.ref('sale_rma.rma_wizard_wizard').id
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Return',
+            'res_model': 'rma.wizard',
+            'view_id': view_id,
+            'view_mode': 'form',
+            'target': 'new',
+        }
+
+
+
+

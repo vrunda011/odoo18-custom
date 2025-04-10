@@ -16,5 +16,7 @@
         'views/res_doctor_view.xml',
         'views/hospital_specialization_view.xml',
         'views/prescription_view.xml',
+        'views/report.xml',
+        'views/prescription_report_template.xml',
     ],
 }

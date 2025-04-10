@@ -6,6 +6,12 @@
         <field name="model">sale.rma</field>
         <field name="arch" type="xml">
             <form string="Sale RMA">
+                <header>
+                    <button name="action_rma_wizard"
+                            string="Return"
+                            type="object"
+                            class="btn-primary"/>
+                </header>
                 <sheet>
                     <div class="oe_title">
                         <h1>
@@ -18,6 +24,17 @@
                             <field name="date"/>
                             <field name="so_id"/>
                         </group>
+                        <notebook>
+                            <page string="RMA lines">
+                                <field name="rma_line_ids">
+                                    <list editable="bottom">
+                                        <field name="product_id"/>
+                                        <field name="qty"/>
+                                        <field name="price"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
                     </group>
                 </sheet>
             </form>
@@ -28,11 +45,11 @@
         <field name="name">sale.rma.list</field>
         <field name="model">sale.rma</field>
         <field name="arch" type="xml">
-            <list string="Sale RMAs">
-                <field name="rma_code"/>
+            <list>
+                <field name="rma_code" />
                 <field name="team_id"/>
-                <field name="so_id"/>
-                <field name="date"/>
+                <field name="date" />
+                <field name="so_id" />
             </list>
         </field>
     </record>
@@ -41,6 +58,7 @@
         <field name="name">Sale RMA</field>
         <field name="res_model">sale.rma</field>
         <field name="view_mode">list,form</field>
+<!--        <field name="model_id" ref="view_sale_rma_list"/>-->
     </record>
 
     <menuitem id="menu_sale_rma" name="Sale RMA"/>

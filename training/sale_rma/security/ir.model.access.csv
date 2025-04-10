@@ -1,3 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 sale_rma.access_sale_rma,access_sale_rma,sale_rma.model_sale_rma,base.group_user,1,1,1,1
 sale_rma.access_rma_team,access_rma_team,sale_rma.model_rma_team,base.group_user,1,1,1,1
+sale_rma.access_rma_lines,access_rma_lines,sale_rma.model_rma_lines,base.group_user,1,1,1,1
+sale_rma.access_rma_wizard,access_rma_wizard,sale_rma.model_rma_wizard,base.group_user,1,1,1,1
+sale_rma.access_rma_wizard_line,access_rma_wizard_line,sale_rma.model_rma_wizard_line,base.group_user,1,1,1,1

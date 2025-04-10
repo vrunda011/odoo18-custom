@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<odoo>
+    <record id="update_qty_wizard_wizard" model="ir.ui.view">
+        <field name="name">update.qty.wizard.wizard</field>
+        <field name="model">update.qty.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Update Quantity">
+                <group>
+                    <field name="location_id"/>
+                    <field name="qty"/>
+                </group>
+                <footer>
+                    <button name="update_qty" type="object" string="Add" class="btn-primary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
