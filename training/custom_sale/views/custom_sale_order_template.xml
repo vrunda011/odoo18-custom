@@ -105,6 +105,7 @@
                             </tbody>
                         </table>
                     </div>
+<!--                    <t t-foreach="docs._compute_discount_amount()" t-as="d">-->
                     <div style="width: 100%; margin-top: 20px; display:inline-block;">
                         <!-- Product Table -->
                         <table class="table" style="border: 1px solid #D3D3D3; width:100%;">
@@ -160,22 +161,24 @@
                             <tr>
                                 <th style="padding:10px;"><strong>Sub-Total</strong></th>
                                 <td style="padding:10px;">
-                                    <span t-esc="o.amount_untaxed"/> $
+                                    <span t-field="o.amount_untaxed" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
                                 </td>
                             </tr>
                             <tr>
                                 <th style="padding:10px;"><strong>Tax</strong></th>
                                 <td style="padding:10px;">
-                                    <span t-esc="o.amount_tax"/> $
+                                    <span t-field="o.amount_tax" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
                                 </td>
                             </tr>
                             <tr>
                                 <th style="padding:10px;"><strong>Discount</strong></th>
-                                <td style="padding:10px;">0.00 $</td>
+                                <td style="padding:10px;">
+                                    <span t-field="o.discount_total_amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                </td>
                             </tr>
                             <tr>
                                 <th style="padding:10px;"><strong>Shipping &amp; Handling</strong></th>
-                                <td style="padding:10px;">0.00 $</td>
+                                <td style="padding:10px;">0.00</td>
                             </tr>
                         </table>
                     </div>
@@ -184,7 +187,11 @@
                         <table class="table" style="width:40%">
                             <tr>
                                 <th style="padding:10px;"><strong>Total</strong></th>
-                                <td style="padding:10px;"><span t-esc="o.amount_total"/> $</td>
+                                <td style="padding:10px;">
+                                    <span t-field="o.amount_total" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+<!--                                    <span t-field="o.currency_id.symbol" />-->
+<!--                                    <span t-field="o.amount_total"/>-->
+                                </td>
                             </tr>
                         </table>
                     </div>

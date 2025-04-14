@@ -8,14 +8,16 @@
             <form string="RMA Products">
                 <sheet>
                     <group>
-                            <field name="record_id"/>
+                            <field name="ticket_id"/>
 <!--                        <notebook>-->
 <!--                            <page string="RMA Product Lines">-->
                             <field name="rma_wizard_line_ids">
-                                <list>
+                                <list editable="bottom">
                                     <field name="product_id"/>
                                     <field name="so_qty"/>
-                                    <field name="quantity"/>
+                                    <field name="available_qty"/>
+                                    <field name="return_qty"/>
+                                    <field name="rma_lines_id"/>
                                 </list>
                             </field>
 <!--                            </page>-->
@@ -23,7 +25,7 @@
                     </group>
                 </sheet>
                 <footer>
-                    <button name="process_return" type="object" string="Process" class="btn-primary"/>
+                    <button name="action_create_picking" type="object" string="Process" class="btn-primary"/>
                 </footer>
             </form>
         </field>

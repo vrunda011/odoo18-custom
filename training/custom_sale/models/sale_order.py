@@ -6,22 +6,32 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     amount_to_words = fields.Text(string="In words", compute='compute_amount_to_words')
+    discount_total_amount = fields.Float('Discount Amount', compute='_compute_discount_amount', store=True)
 
-    @api.model
-    def create(self, vals):
+    @api.depends('order_line.price_unit', 'order_line.discount', 'order_line.product_uom_qty')
+    def _compute_discount_amount(self):
+        for order in self:
+            total = 0.0
+            for line in order.order_line:
+                total += line.price_unit * ((line.discount or 0.0) / 100.0) * line.product_uom_qty
+            order.discount_total_amount = total
+
+    @api.model_create_multi
+    def create(self, vals_list):
         # partner_id = vals.get('partner_id')
-        template_id = vals.get('sale_order_template_id')
+        for rec in vals_list:
+            template_id = rec['sale_order_template_id']
 
-        if vals['partner_id']:
-            partner = self.env['res.partner'].browse(vals['partner_id'])
-            if partner.use_customers_tc and partner.tc:
-                vals['note'] = partner.tc
-            elif template_id:
-                template = self.env['sale.order.template'].browse(template_id)
-                if template.note:
-                    vals['note'] = template.note
+            if rec['partner_id']:
+                partner = self.env['res.partner'].browse(rec['partner_id'])
+                if partner.use_customers_tc and partner.tc:
+                    rec['note'] = partner.tc
+                elif template_id:
+                    template = self.env['sale.order.template'].browse(template_id)
+                    if template.note:
+                        rec['note'] = template.note
 
-        return super(SaleOrder, self).create(vals)
+        return super(SaleOrder, self).create(vals_list)
 
     @api.depends('amount_total')
     def compute_amount_to_words(self):

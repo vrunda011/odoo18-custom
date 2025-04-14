@@ -1,4 +1,6 @@
 from odoo import models, fields, api
+from odoo.exceptions import UserError
+
 
 class SaleRMA(models.Model):
     _name = 'sale.rma'
@@ -10,6 +12,10 @@ class SaleRMA(models.Model):
     so_id = fields.Many2one('sale.order', string='Sale Order')
 
     rma_line_ids = fields.One2many('rma.lines','rma_line_id', string="RMA Lines")
+    picking_ids = fields.One2many('stock.picking', 'rma_id', string="Picking Ids")
+    picking_count = fields.Integer(string="Picking", compute='_compute_picking_count', store=True)
+
+
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -53,6 +59,33 @@ class SaleRMA(models.Model):
             'view_mode': 'form',
             'target': 'new',
         }
+
+    def action_open_picking(self):
+        form_view_id = self.env.ref('stock.view_picking_form').id
+        list_view_id = self.env.ref('stock.vpicktree').id
+
+        res = {
+            'name': 'picking',
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'res_model': 'stock.picking',
+            'view_id': form_view_id,
+            'target': 'current',
+            'domain': [('rma_id', '=', self.id)],
+        }
+
+        if self.picking_count > 0:
+            res['views'] = [(list_view_id, 'list'), (form_view_id, 'form')]
+            res['domain'] = [('rma_id', '=', self.id)]
+            res['view_mode'] = "form,list"
+            res['view_id'] = False
+        return res
+
+    @api.depends('picking_ids.rma_id')
+    def _compute_picking_count(self):
+        for record in self:
+            record.picking_count = self.env['stock.picking'].search_count([('rma_id', '=', record.id)])
+
 
 
 
