@@ -32,10 +32,11 @@ class SaleOrder(models.Model):
         return False
 
     def button_approve(self, force=False):
-        res = super(SaleOrder, self).action_confirm()
-        self = self.filtered(lambda order: order._approval_allowed())
-        self.write({'state': 'sale', 'date_order': fields.Datetime.now()})
-        return res
+        # res = super(SaleOrder, self).action_confirm()
+        to_approve_orders = self.filtered(lambda order: order._approval_allowed())
+        # self.write({'state': 'sale', 'date_order': fields.Datetime.now()})
+        if to_approve_orders:
+            super(SaleOrder, self).action_confirm()
 
     def _approval_allowed(self):
         """Returns whether the order qualifies to be approved by the current user"""
