@@ -10,11 +10,15 @@ class SaleOrder(models.Model):
     )
 
     def action_confirm(self):
-        for order in self:
-            if order._approval_allowed():
-                order.button_approve()
-            else:
-                order.write({'state': 'to approve'})
+        if self._context.get('approved'):
+            super(SaleOrder, self).action_confirm()
+
+        else:
+            for order in self:
+                if order._approval_allowed():
+                    order.button_approve()
+                else:
+                    order.write({'state': 'to approve'})
 
     def _confirmation_error_message(self):
         """ Return whether order can be confirmed or not if not then returm error message. """
@@ -32,11 +36,11 @@ class SaleOrder(models.Model):
         return False
 
     def button_approve(self, force=False):
-        # res = super(SaleOrder, self).action_confirm()
-        to_approve_orders = self.filtered(lambda order: order._approval_allowed())
-        # self.write({'state': 'sale', 'date_order': fields.Datetime.now()})
-        if to_approve_orders:
-            super(SaleOrder, self).action_confirm()
+        self.with_context(approved=True).action_confirm()
+
+        # to_approve_orders = self.filtered(lambda order: order._approval_allowed())
+        # if to_approve_orders:
+        #     super(SaleOrder, self).action_confirm()
 
     def _approval_allowed(self):
         """Returns whether the order qualifies to be approved by the current user"""
