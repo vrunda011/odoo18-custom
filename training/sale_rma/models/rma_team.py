@@ -4,5 +4,5 @@ class RMATeam(models.Model):
     _name = 'rma.team'
     _description = 'RMA Team'
 
-    name = fields.Char(required=True)
-    prefix = fields.Char(string='Sequence Prefix', required=True)
+    name = fields.Char(string='Team Name')
+    prefix = fields.Char(string='Sequence Prefix')

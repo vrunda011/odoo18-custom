@@ -66,3 +66,6 @@ class RMAWizard(models.TransientModel):
             line_vals_list.append(line_vals)
         return line_vals_list
 
+    def _merge_moves(self, merge_into=False):
+        return self
+

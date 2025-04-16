@@ -9,8 +9,8 @@
                 <sheet>
                     <group>
                         <group string="Team Information">
-                            <field name="name"/>
-                            <field name="prefix"/>
+                            <field name="name" required="1"/>
+                            <field name="prefix" required="1"/>
                         </group>
                     </group>
                 </sheet>

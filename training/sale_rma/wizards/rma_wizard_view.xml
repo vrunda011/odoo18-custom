@@ -8,20 +8,16 @@
             <form string="RMA Products">
                 <sheet>
                     <group>
-                            <field name="ticket_id"/>
-<!--                        <notebook>-->
-<!--                            <page string="RMA Product Lines">-->
-                            <field name="rma_wizard_line_ids">
-                                <list editable="bottom">
-                                    <field name="product_id"/>
-                                    <field name="so_qty"/>
-                                    <field name="available_qty"/>
-                                    <field name="return_qty"/>
-                                    <field name="rma_lines_id"/>
-                                </list>
-                            </field>
-<!--                            </page>-->
-<!--                        </notebook>-->
+                        <field name="ticket_id" readonly="1"/>
+                        <field name="rma_wizard_line_ids">
+                            <list editable="bottom">
+                                <field name="product_id"/>
+                                <field name="so_qty"/>
+                                <field name="available_qty"/>
+                                <field name="return_qty"/>
+                                <field name="rma_lines_id" column_invisible="1"/>
+                            </list>
+                        </field>
                     </group>
                 </sheet>
                 <footer>

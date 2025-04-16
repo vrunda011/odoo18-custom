@@ -5,6 +5,7 @@ from odoo.exceptions import UserError
 class SaleRMA(models.Model):
     _name = 'sale.rma'
     _description = 'RMA'
+    _rec_name = 'rma_code'
 
     rma_code = fields.Char(string='RMA ID', default='New')
     team_id = fields.Many2one('rma.team', string='Team', required=True)
@@ -14,8 +15,6 @@ class SaleRMA(models.Model):
     rma_line_ids = fields.One2many('rma.lines','rma_line_id', string="RMA Lines")
     picking_ids = fields.One2many('stock.picking', 'rma_id', string="Picking Ids")
     picking_count = fields.Integer(string="Picking", compute='_compute_picking_count', store=True)
-
-
 
     @api.model_create_multi
     def create(self, vals_list):
