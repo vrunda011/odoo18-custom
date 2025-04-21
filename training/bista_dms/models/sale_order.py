@@ -19,3 +19,8 @@ class SaleOrder(models.Model):
             matching_docs |= docs
 
         self.document_ids = [(6, 0, matching_docs.ids)]
+
+    def action_confirm(self):
+        res = super().action_confirm()
+        self.picking_ids.document_ids = self.document_ids
+        return res

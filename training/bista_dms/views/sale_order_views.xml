@@ -10,7 +10,7 @@
                 <field name="tags_ids" widget="many2many_tags"/>
             </field>
             <field name="tags_ids" position="after">
-                <field name="document_ids" widget="many2many_tags"/>
+                <field name="document_ids" widget="many2many_tags" readonly="1"/>
             </field>
             <xpath expr="//button[@name='action_cancel']" position="after">
                 <button name="action_get_documents" string="Get Documents" type="object" class="btn-primary"/>

@@ -9,7 +9,6 @@
             <field name="vat" position="after">
                 <field name="tag_ids" widget="many2many_tags"/>
             </field>
-
         </field>
     </record>
 </odoo>

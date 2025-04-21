@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="stock_delivery_report" inherit_id="stock.report_delivery_document">
+<!--        xpath = "//div[@class='page']/table[1][@class='table table-borderless']"-->
+        <xpath expr="//table[1]" position="after">
+            <t t-if="o.document_ids">
+                <h4>Documents of Products</h4>
+                <table class="table table-borderless" name="product_documents_table">
+                    <thead>
+                        <tr>
+                            <th><strong>Document Name</strong></th>
+                            <th><strong>Tags</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="o.document_ids" t-as="data">
+                            <tr>
+                                <td><t t-esc="data.name"/></td>
+                                <td>
+                                    <t t-foreach="data.tag_ids" t-as="tag">
+                                        <span t-esc="tag.name"/>
+                                    </t>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </t>
+        </xpath>
+    </template>
+</odoo>
