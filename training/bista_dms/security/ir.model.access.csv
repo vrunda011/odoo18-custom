@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+bista_dms.access_dms_documents,access_dms_documents,bista_dms.model_documents_custom,,1,1,1,1
+bista_dms.access_dms_doc_tag_master,access_dms_doc_tag_master,bista_dms.model_doc_tag_master,,1,1,1,1

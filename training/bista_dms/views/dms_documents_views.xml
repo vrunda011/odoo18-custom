@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <record id="view_dms_documents_form" model="ir.ui.view">
+        <field name="name">dms.documents.form</field>
+        <field name="model">documents.custom</field>
+        <field name="arch" type="xml">
+            <form string="Documents">
+                <sheet>
+                    <group>
+                        <group string="Document Information">
+                            <field name="name"/>
+                            <field name="attachment_id"/>
+                            <field name="tag_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_dms_documents_list" model="ir.ui.view">
+        <field name="name">dms.documents.list</field>
+        <field name="model">documents.custom</field>
+        <field name="arch" type="xml">
+            <list string="Documents">
+                <field name="name"/>
+                <field name="attachment_id"/>
+                <field name="tag_ids" />
+            </list>
+        </field>
+    </record>
+
+    <record id="action_dms_documents" model="ir.actions.act_window">
+        <field name="name">Documents</field>
+        <field name="res_model">documents.custom</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_bista_dms" name="DMS"/>
+    <menuitem id="menu_dms_document_sub" name="Documents" parent="menu_bista_dms" action="action_dms_documents"/>
+</odoo>
