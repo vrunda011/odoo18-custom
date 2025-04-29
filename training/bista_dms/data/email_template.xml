@@ -1,0 +1,16 @@
+<odoo>
+    <record id="email_template_get_documents" model="mail.template">
+        <field name="name">Get Document Action</field>
+        <field name="model_id" ref="bista_dms.model_sale_order"/>
+        <field name="email_from">{{ object.env.user.email }}</field>
+        <field name="email_to">{{ object.user_id.login }}</field>
+        <field name="subject">Get Document Action: {{ object.partner_id.name }}</field>
+        <field name="body_html" type="html">
+            <strong> <p >Hello <t t-out="object.user_id.name"/>,</p></strong>
+
+            <p>Get Document is performed by <t t-out="object.partner_id.name"/>.</p>
+            <p>This action is performed on <t t-out="object.name"/>.</p>
+            <p>Thank you!</p>
+        </field>
+    </record>
+</odoo>

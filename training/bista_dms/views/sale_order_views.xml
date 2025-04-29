@@ -15,6 +15,40 @@
             <xpath expr="//button[@name='action_cancel']" position="after">
                 <button name="action_get_documents" string="Get Documents" type="object" class="btn-primary"/>
             </xpath>
+            <xpath expr="//button[@name='action_get_documents']" position="after">
+                <button name="action_update_documents"
+                        string="Update Documents"
+                        type="object"
+                        class="btn-primary"
+                        invisible = "not allow_value or state!='sale'"/>
+            </xpath>
+
+            <xpath expr="//button[@name='action_get_documents']" position="after">
+                <button name="%(bista_dms.action_view_add_product)d"
+                        string="Add Documents"
+                        type="action"
+                        class="btn-primary"/>
+            </xpath>
+
+            <field name="document_ids" position="after">
+                <field name="total_document" readonly="1"/>
+            </field>
+            <field name="total_document" position="after">
+                <field name="allow_value" readonly="1"/>
+            </field>
+
+            <xpath expr="//page[@name='customer_signature']" position="after">
+                <page string="Documents" >
+                    <field name="document_line_ids">
+                        <list>
+                            <field name="doc_id"/>
+                            <field name="product_ids" widget="many2many_tags"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+
+
         </field>
     </record>
 </odoo>

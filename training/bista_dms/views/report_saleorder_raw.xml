@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="sale_delivery_report" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//div[@name='so_total_summary']" position="after">
+            <t t-foreach="docs" t-as="o">
+              <div class="page">
+                <h3>Related Document Lines</h3>
+                <table class="table table-sm table-bordered" name="order_line">
+                  <thead>
+                    <tr>
+                      <th>Document Name</th>
+                      <th id="product_head">Product Name</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <t t-foreach="o.document_line_ids" t-as="line">
+                      <t t-set="doc_name" t-value="line.doc_id.name or 'N/A'"/>
+                        <tr>
+                          <td><t t-esc="doc_name"/></td>
+                          <td>
+                              <t t-foreach="line.product_ids" t-as="product">
+                                  <t t-esc="product.name"/>
+                                  <br/>
+                              </t>
+                          </td>
+                        </tr>
+                    </t>
+                  </tbody>
+                </table>
+              </div>
+            </t>
+        </xpath>
+    </template>
+</odoo>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="sale_delivery_report_inherit" inherit_id="bista_dms.sale_delivery_report">
+        <xpath expr="//table[@name='order_line']//th[@id='product_head']" position="replace">
+            <th>Product Lines</th>
+        </xpath>
+    </template>
+</odoo>

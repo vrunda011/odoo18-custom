@@ -7,6 +7,9 @@
     "depends": ['base','product', 'sale', 'stock'],
     "data": [
         'security/ir.model.access.csv',
+        'data/email_template.xml',
+        'data/system_param.xml',
+        'wizards/add_product_wizard_view.xml',
         'views/dms_documents_views.xml',
         'views/dms_doc_tag_master_views.xml',
         'views/res_partner_views.xml',
@@ -14,6 +17,9 @@
         'views/sale_order_views.xml',
         'views/stock_picking_views.xml',
         'views/report_deliveryslip.xml',
+        'views/dms_document_line_view.xml',
+        'views/report_saleorder_raw.xml',
+        'views/report_saleorder.xml',
     ],
     'application' : True
 }

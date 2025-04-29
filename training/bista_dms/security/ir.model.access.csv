@@ -1,3 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 bista_dms.access_dms_documents,access_dms_documents,bista_dms.model_documents_custom,,1,1,1,1
 bista_dms.access_dms_doc_tag_master,access_dms_doc_tag_master,bista_dms.model_doc_tag_master,,1,1,1,1
+bista_dms.access_dms_document_line,access_dms_document_line,bista_dms.model_document_line,,1,1,1,1
+bista_dms.access_add_product_wizard,access_add_product_wizard,bista_dms.model_add_product_wizard,,1,1,1,1
