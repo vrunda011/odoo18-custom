@@ -4,12 +4,13 @@
     "description": """""",
     "author": "Bista Solutions Pvt.Ltd",
     "version": "18.0",
-    "depends": ['base','sale'],
+    "depends": ['base','sale','product'],
     "data": [
         'security/ir.model.access.csv',
         # 'data/ir_sequence.xml',
         'views/sale_rma_view.xml',
         'views/rma_team_view.xml',
         'wizards/rma_wizard_view.xml',
+        'wizards/rma_invoice_wizard_view.xml',
     ],
 }

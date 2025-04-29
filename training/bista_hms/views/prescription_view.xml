@@ -22,14 +22,14 @@
                     </div>
                     <group>
                         <group string="Patient Information">
-                            <field name="patient_id"/>
+                            <field name="patient_id" options="{'no_quick_create': True, 'no_create_edit' : True}"/>
                             <field name="date" />
                         </group>
                         <notebook>
                             <page string="Prescriptions">
                                 <field name="prescription_lines">
                                     <list editable="bottom">
-                                        <field name="product_id" domain="['|',('type', '!=', 'service'),('list_price', '&gt;=', 100)]"/>
+                                        <field name="product_id" domain="['|',('type', '!=', 'service'),('list_price', '&gt;=', 100)]" options="{'no_quick_create': True, 'no_create_edit' : True}"/>
                                         <field name="quantity"/>
                                         <field name="delivered_qty"/>
                                         <field name="price_unit" readonly="1"/>

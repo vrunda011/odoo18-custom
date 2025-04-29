@@ -10,6 +10,7 @@ class RMAWizardLine(models.TransientModel):
     return_qty = fields.Float(string='Quantity')
     available_qty = fields.Float(string='Avail Quantity', compute='_compute_available_qty')
     rma_lines_id = fields.Many2one('rma.lines', string='RMA Lines')
+    rma_invoice_line_id = fields.Many2one('rma.invoice.wizard', string='Invoice Wizard id')
 
     @api.depends('so_qty', 'rma_lines_id.to_receive_qty')
     def _compute_available_qty(self):

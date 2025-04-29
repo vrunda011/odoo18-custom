@@ -47,6 +47,7 @@ class ResPatient(models.Model):
 
     partner_id = fields.Many2one("res.partner", string="Partner")
 
+    # Name Search
     @api.model
     def name_search(self, name='', args=None, operator='ilike', limit=100):
         if not args:
@@ -62,11 +63,13 @@ class ResPatient(models.Model):
         patient_ids = self.search_fetch(args, ['phone'], limit=limit)
         return [(patient_id.id, patient_id.display_name) for patient_id in patient_ids.sudo()]
 
+    # Display Name
     @api.depends('patient_code', 'name')
     def _compute_display_name(self):
         for rec in self:
             rec.display_name = f"{rec.patient_code}, {rec.name}"
 
+    # Smart button method
     @api.depends('prescription_ids.patient_id')
     def _compute_prescription_count(self):
         for record in self:
@@ -227,6 +230,7 @@ class ResPatient(models.Model):
                 })
             # print("---weekly appointment----")
 
+    # Write method
     def write(self, vals):
         if self.env.context.get('prevent_recursive_write_patient'):
             return super(ResPatient, self).write(vals)

@@ -11,14 +11,15 @@ class SaleRMA(models.Model):
     move_ids = fields.One2many('stock.move', 'move_line_id', string='Move Id')
     to_receive_qty = fields.Float(string="To Receive", compute='_compute_to_receive_qty', store=True)
     received_qty = fields.Float(string="Received Qty", compute='_compute_to_received_qty', store=True)
+    to_invoice_qty = fields.Float(string="To Invoice")
+    invoiced_qty = fields.Float(string="Invoiced Qty")
 
-    @api.depends('move_ids.state')
+    @api.depends('move_ids.state', 'move_ids.product_uom_qty')
     def _compute_to_receive_qty(self):
         for rec in self:
-            total_qty = sum(rec.move_ids.mapped('product_uom_qty'))
-            rec.to_receive_qty = total_qty - rec.received_qty
+            rec.to_receive_qty = sum(rec.move_ids.filtered(lambda s: s.state not in ['done', 'cancel']).mapped('product_uom_qty'))
 
-    @api.depends('move_ids.quantity')
+    @api.depends('move_ids.state', 'move_ids.quantity')
     def _compute_to_received_qty(self):
         for rec in self:
-            rec.received_qty = sum(rec.move_ids.mapped('quantity'))
+            rec.received_qty = sum(rec.move_ids.filtered(lambda m: m.state == 'done').mapped('quantity'))

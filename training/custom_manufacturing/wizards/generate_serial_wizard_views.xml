@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<odoo>
+    <record id="generate_sr_wizard" model="ir.ui.view">
+        <field name="name">generate.sr.wizard</field>
+        <field name="model">generate.serial.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generate Serial">
+                <group>
+                    <field name="serial_count"/>
+                </group>
+                <footer>
+                    <button name="generate_serial" type="object" string="Generate" class="btn-primary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

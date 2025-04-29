@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <record id="crm_activity_list_view" model="ir.ui.view">
+        <field name="name">crm.activity.list.view</field>
+        <field name="model">student.activity</field>
+        <field name="arch" type="xml">
+            <list name="Percentage Stage">
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+</odoo>

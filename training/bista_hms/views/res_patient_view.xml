@@ -46,7 +46,6 @@
                             <field name="previous_diseases" />
                             <field name="weekly_visit" />
                         </group>
-
                         <notebook>
                             <page string="Appointments">
                                 <field name="appointment_ids">

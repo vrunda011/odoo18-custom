@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+bista_crm.access_crm_percentage_stage_admin,access_crm_percentage_stage_admin,bista_crm.model_crm_percentage_stage,sales_team.group_sale_manager,1,1,1,0
+bista_crm.access_crm_percentage_stage_user,access_crm_percentage_stage_user,bista_crm.model_crm_percentage_stage,sales_team.group_sale_salesman,1,0,0,0
+bista_crm.access_crm_student_activity,access_crm_student_activity,bista_crm.model_student_activity,,1,1,1,1
+
+bista_crm.access_activity_admin_access,access_activity_admin_access,bista_crm.model_student_activity,bista_crm.activity_admin_access,1,1,1,1
+bista_crm.access_activity_user_access,access_activity_user_access,bista_crm.model_student_activity,bista_crm.activity_user_access,1,1,1,1

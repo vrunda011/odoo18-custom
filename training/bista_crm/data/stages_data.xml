@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <record id="crm_percentage_stage1" model="crm.percentage.stage">
+        <field name="name">stage1</field>
+        <field name="percentage">10</field>
+    </record>
+    <record id="crm_percentage_stage2" model="crm.percentage.stage">
+        <field name="name">stage2</field>
+        <field name="percentage">20</field>
+    </record>
+    <record id="crm_percentage_stage3" model="crm.percentage.stage">
+        <field name="name">stage3</field>
+        <field name="percentage">30</field>
+    </record>
+    <record id="crm_percentage_stage4" model="crm.percentage.stage">
+        <field name="name">stage4</field>
+        <field name="percentage">40</field>
+    </record>
+    <record id="crm_percentage_stage5" model="crm.percentage.stage">
+        <field name="name">stage5</field>
+        <field name="percentage">50</field>
+    </record>
+</odoo>

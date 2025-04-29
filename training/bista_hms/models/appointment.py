@@ -34,6 +34,7 @@ class HmsAppointment(models.Model):
 
     service_product_id = fields.Many2one('product.product', string="Service", domain=[('type', '=', 'service')])
 
+    # Sequence Code
     @api.model_create_multi
     def create(self, vals_list):
         res = super(HmsAppointment, self).create(vals_list)
@@ -72,6 +73,7 @@ class HmsAppointment(models.Model):
     #         raise ValidationError("You can not delete a record which is not in draft or cancel state")
     #     return super(HmsAppointment, self).unlink()
 
+    # Button Action
     def action_confirm(self):
         self.state = 'confirm'
 
@@ -97,6 +99,7 @@ class HmsAppointment(models.Model):
     def action_cancel(self):
         self.state = 'cancel'
 
+    # Mail
     def action_send_mail_appointment(self):
         template_id = self.env.ref('bista_hms.email_template_appointment_confirm')
         if template_id:
@@ -104,6 +107,7 @@ class HmsAppointment(models.Model):
         else:
             raise UserError("Mail Template not found. Please check the template.")
 
+    # Schedule Action
     def _send_appointment_reminder_today(self):
         # Send appointment reminder to patients
         # This method will be called by a cron job

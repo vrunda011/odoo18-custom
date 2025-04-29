@@ -4,3 +4,5 @@ sale_rma.access_rma_team,access_rma_team,sale_rma.model_rma_team,base.group_user
 sale_rma.access_rma_lines,access_rma_lines,sale_rma.model_rma_lines,base.group_user,1,1,1,1
 sale_rma.access_rma_wizard,access_rma_wizard,sale_rma.model_rma_wizard,base.group_user,1,1,1,1
 sale_rma.access_rma_wizard_line,access_rma_wizard_line,sale_rma.model_rma_wizard_line,base.group_user,1,1,1,1
+sale_rma.access_rma_invoice_wizard,access_rma_invoice_wizard,sale_rma.model_rma_invoice_wizard,base.group_user,1,1,1,1
+sale_rma.access_rma_invoice_line,access_rma_invoice_line,sale_rma.model_rma_invoice_line,base.group_user,1,1,1,1

@@ -15,7 +15,7 @@
                             invisible="state != 'in_consultation'" class="btn-primary"/>
                     <button name="action_send_mail_appointment" string="Send Email" type="object"
                             invisible="state != 'confirm'" class="btn-primary"/>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,in_consultation,confirm,done"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_consultation,confirm,done" options="{'clickable':'1'}"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -23,9 +23,17 @@
                             <field name="appointment_code" readonly="1"/>
                         </h1>
                     </div>
+
+                    <!-- Ribbon -->
+                    <widget name="web_ribbon" title="Draft" invisible="state != 'draft'"/>
+                    <widget name="web_ribbon" title="Confirm" invisible="state != 'confirm'"/>
+                    <widget name="web_ribbon" title="In Consultation" invisible="state != 'in_consultation'"/>
+                    <widget name="web_ribbon" title="Done" invisible="state != 'done'"/>
+                    <widget name="web_ribbon" title="Cancel" invisible="state != 'cancel'"/>
+
                     <group>
                         <group>
-                            <field name="patient_id"/>
+                            <field name="patient_id" options="{'no_quick_create': True, 'no_create_edit' : True}"/>
                             <field name="phone" />
                             <field name="appointment_date"/>
                             <field name="appointment_reason"/>
@@ -42,6 +50,8 @@
                             <field name="total_consultation_time" readonly="1"/>
                         </group>
                     </group>
+
+
                 </sheet>
             </form>
         </field>
@@ -60,6 +70,32 @@
         </field>
     </record>
 
+    <!--Search View-->
+    <record id="hms_appointment_search" model="ir.ui.view">
+        <field name="name">hms.appointment.search</field>
+        <field name="model">hms.appointment</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="appointment_code" />
+                <field name="patient_id" filter_domain="['|',('patient_id.age','ilike',self),('patient_id.email','ilike',self)]" />
+                <field name="appointment_reason"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_date" string="Date" domain="[]" context="{'group_by':'appointment_date'}"/>
+                    <filter name="group_patient" string="Patient" domain="[]" context="{'group_by':'patient_id'}"/>
+                    <filter name="group_status" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                </group>
+                <separator/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Confirm" name="confirm" domain="[('state', '=', 'confirm')]"/>
+                <filter string="In consultation" name="in_consultation" domain="[('state', '=', 'in_consultation')]"/>
+                <filter string="Waiting" name="waiting" domain="[('state', '=', 'waiting')]"/>
+                <filter string="Done" name="done" domain="[('state', '=', 'done')]"/>
+                <filter string="Cancel" name="cancel" domain="[('state', '=', 'cancel')]"/>
+                <separator/>
+            </search>
+        </field>
+    </record>
+
     <record id="action_hms_appointment" model="ir.actions.act_window">
         <field name="name">Appointments</field>
         <field name="res_model">hms.appointment</field>
@@ -68,3 +104,4 @@
     <menuitem id="menu_res_patient_sub2" name="Appointments" parent="menu_bista_hms" action="action_hms_appointment"/>
 
 </odoo>
+

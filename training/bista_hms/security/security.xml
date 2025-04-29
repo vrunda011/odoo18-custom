@@ -2,7 +2,7 @@
 
 <odoo>
    <data>
-       <record  id="group_prescription_user" model="res.groups">
+       <record id="group_prescription_user" model="res.groups">
            <field name="name">Prescription User</field>
        </record>
 

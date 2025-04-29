@@ -9,8 +9,6 @@ class SaleOrderLine(models.Model):
     wh_location_ids = fields.Many2many('stock.location', string='Location')
     available_qty_loc = fields.Float(string='Loc Qty', compute='_compute_quantities')
 
-
-
     @api.depends('product_id', 'product_uom', 'product_uom_qty','order_id.partner_id')
     def _compute_discount(self):
         res = super(SaleOrderLine, self)._compute_discount()

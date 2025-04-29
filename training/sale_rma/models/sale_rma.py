@@ -80,10 +80,22 @@ class SaleRMA(models.Model):
             res['view_id'] = False
         return res
 
-    @api.depends('picking_ids.rma_id')
+    @api.depends('picking_ids')
     def _compute_picking_count(self):
         for record in self:
             record.picking_count = self.env['stock.picking'].search_count([('rma_id', '=', record.id)])
+
+    def action_rma_invoice_wizard(self):
+        view_id = self.env.ref('sale_rma.rma_invoice_wizard_view').id
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Invoice',
+            'res_model': 'rma.invoice.wizard',
+            'view_id': view_id,
+            'view_mode': 'form',
+            'target': 'new',
+
+        }
 
 
 

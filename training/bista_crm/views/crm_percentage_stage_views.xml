@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <record id="crm_percentage_stage_form_view" model="ir.ui.view">
+        <field name="name">crm.percentage.stage.form.view</field>
+        <field name="model">crm.percentage.stage</field>
+        <field name="arch" type="xml">
+            <form name="Percentage Stage">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="percentage"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="crm_percentage_stage_list_view" model="ir.ui.view">
+        <field name="name">crm.percentage.stage.list.view</field>
+        <field name="model">crm.percentage.stage</field>
+        <field name="arch" type="xml">
+            <list name="Percentage Stage">
+                <field name="name"/>
+                <field name="percentage"/>
+            </list>
+        </field>
+    </record>
+
+</odoo>
