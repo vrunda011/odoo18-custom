@@ -37,3 +37,15 @@ class SaleOrder(models.Model):
     def compute_amount_to_words(self):
         for rec in self:
             rec.amount_to_words = num2words(rec.amount_total, lang='en_IN', to='currency', currency='USD').title()
+
+    def action_process_all(self):
+        self.action_confirm()
+        self.picking_ids.button_validate()
+        self._create_invoices()
+        self.invoice_ids.action_post()
+        vals = self.invoice_ids.action_register_payment()
+
+        wizard = self.env['account.payment.register'].with_context(vals['context']).create({})
+        wizard._create_payments()
+
+

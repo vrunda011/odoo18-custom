@@ -7,7 +7,7 @@
     "depends": ['base','product','sale','contacts','purchase'],
     "data": [
         'security/ir.model.access.csv',
-        'views/sale_order_line_view.xml',
+        'views/sale_order_view.xml',
         'views/res_partner_view.xml',
         'views/product_template_view.xml',
         'wizards/update_qty_wizard.xml',
