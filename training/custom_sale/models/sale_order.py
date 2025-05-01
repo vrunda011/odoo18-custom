@@ -40,11 +40,16 @@ class SaleOrder(models.Model):
 
     def action_process_all(self):
         self.action_confirm()
+        po = self._get_purchase_orders()
+        if po:
+            po.button_confirm()
+            po.action_view_picking()
+            po.picking_ids.button_validate()
+
         self.picking_ids.button_validate()
         self._create_invoices()
         self.invoice_ids.action_post()
         vals = self.invoice_ids.action_register_payment()
-
         wizard = self.env['account.payment.register'].with_context(vals['context']).create({})
         wizard._create_payments()
 

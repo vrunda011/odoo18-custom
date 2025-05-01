@@ -18,5 +18,6 @@ class MrpProduction(models.Model):
 
     def button_mark_done(self):
         res = super().button_mark_done()
-        self.serial_ids = [(3, self.lot_producing_id.id)]
+        if self.state == 'done':
+            self.serial_ids = [(3, self.lot_producing_id.id)]
         return res
