@@ -8,6 +8,8 @@ class SaleOrderLine(models.Model):
     available_qty_wh = fields.Float(string='WH Qty', compute='_compute_quantities')
     wh_location_ids = fields.Many2many('stock.location', string='Location')
     available_qty_loc = fields.Float(string='Loc Qty', compute='_compute_quantities')
+    process_qty = fields.Float('Process Quantity')
+
 
     @api.depends('product_id', 'product_uom', 'product_uom_qty','order_id.partner_id')
     def _compute_discount(self):
