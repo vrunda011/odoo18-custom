@@ -5,13 +5,14 @@ class StockPicking(models.Model):
 
     # Generate Serial Number
     def generate_serial_no(self):
-        seq_id = self.move_ids.product_id.sequence_id
-        product_qty = int(self.move_ids.quantity)
-        for _ in range(product_qty):
-            serial_no = seq_id.next_by_id()
-            lot = self.env['stock.lot'].create({
-                'name': serial_no,
-                'product_id': self.product_id.id,
-            })
+        for move in self.move_ids:
+            seq_id = move.product_id.sequence_id
+            product_qty = int(move.quantity)
+            for _ in range(product_qty):
+                serial_no = seq_id.next_by_id()
+                lot = self.env['stock.lot'].create({
+                    'name': serial_no,
+                    'product_id': move.product_id.id,
+                })
 
-            self.move_ids.lot_ids = [(4, lot.id)]
+                move.lot_ids = [(4, lot.id)]
