@@ -43,11 +43,6 @@ class SaleOrder(models.Model):
     def action_process_all(self):
         self.action_confirm()
 
-        # Assign Process Quantity for SO
-        for order in self.order_line:
-            for move in order.move_ids:
-                move.quantity = order.process_qty
-
         po = self._get_purchase_orders()
         if po:
             for order in po:
@@ -62,6 +57,7 @@ class SaleOrder(models.Model):
 
                 # BACKORDER for PO
                 order.action_view_picking()
+                order.picking_ids.generate_serial_no()
                 picking_vals = order.picking_ids.button_validate()
                 if picking_vals != True:
                     pickings_to_validate = picking_vals['context']['button_validate_picking_ids']
@@ -73,11 +69,17 @@ class SaleOrder(models.Model):
                 invoice_id = order.invoice_ids
                 invoice_id.update({'invoice_date': date.today()})
                 order.invoice_ids.action_post()
-                order.picking_ids.action_assign()
+                # order.picking_ids.action_assign()
 
                 # PAYMENT for PO bill
                 payment_vals = order.invoice_ids.action_register_payment()
                 self.env['account.payment.register'].with_context(payment_vals['context']).create({})._create_payments()
+
+
+        # Assign Process Quantity for SO
+        for order in self.order_line:
+            for move in order.move_ids:
+                move.quantity = order.process_qty
 
         # BACKORDER for SO
         picking_vals = self.picking_ids.button_validate()
