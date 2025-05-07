@@ -10,9 +10,8 @@ class AddProductWizard(models.TransientModel):
 
     def action_add_product(self):
         self.ticket_id = self.env.context.get('active_id')
-
+        product_list = []
         for line in self.product_ids:
-            product_list = []
             product_list.append((0, 0, {
                 'name': line.name,
                 'product_template_id': line.id,
