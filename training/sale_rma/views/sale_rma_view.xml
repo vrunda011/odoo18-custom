@@ -34,13 +34,17 @@
                         <group string="Return Product Information">
                             <field name="team_id"/>
                             <field name="date"/>
-                            <field name="so_id"/>
+                        </group>
+                        <group string="Customer Information">
+                            <field name="customer_id" />
+                            <field name="so_id" context="{'customer_id': customer_id }" options="{'no_create':1}"/>
+                            <field name="product_ids" widget="many2many_tags"/>
                         </group>
                         <notebook>
                             <page string="RMA lines">
                                 <field name="rma_line_ids">
                                     <list editable="bottom">
-                                        <field name="product_id"/>
+                                        <field name="product_id" domain="[('id', 'not in', parent.product_ids)]"/>
                                         <field name="qty"/>
                                         <field name="price"/>
                                         <field name="to_receive_qty"/>

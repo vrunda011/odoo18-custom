@@ -16,6 +16,9 @@ class SaleRMA(models.Model):
     picking_ids = fields.One2many('stock.picking', 'rma_id', string="Picking Ids")
     picking_count = fields.Integer(string="Picking", compute='_compute_picking_count', store=True)
 
+    customer_id = fields.Many2one('res.partner', string='Customer')
+    product_ids = fields.Many2many('product.product', string='Products', compute='_compute_rma_lines_product', store=True)
+
     @api.model_create_multi
     def create(self, vals_list):
         for rec in vals_list:
@@ -37,16 +40,15 @@ class SaleRMA(models.Model):
 
     @api.onchange('so_id')
     def onchange_sale_order(self):
-        if self.so_id:
-            rma_lines = []
-            rma_lines = [(5, 0, 0)]
-            for line in self.so_id.order_line:
-                rma_lines.append((0, 0, {
-                    'product_id': line.product_id.id,
-                    'qty': line.product_uom_qty,
-                    'price': line.price_unit,
-                }))
-            self.rma_line_ids = rma_lines
+        rma_lines = []
+        rma_lines = [(5, 0, 0)]
+        for line in self.so_id.order_line:
+            rma_lines.append((0, 0, {
+                'product_id': line.product_id.id,
+                'qty': line.product_uom_qty,
+                'price': line.price_unit,
+            }))
+        self.rma_line_ids = rma_lines
 
     def action_rma_wizard(self):
         view_id = self.env.ref('sale_rma.rma_wizard_wizard').id
@@ -97,7 +99,12 @@ class SaleRMA(models.Model):
 
         }
 
-
-
-
-
+    # Add products into M2m field
+    @api.depends('rma_line_ids.product_id')
+    def _compute_rma_lines_product(self):
+        for rec in self:
+            products = []
+            for line in rec.rma_line_ids:
+                if line.product_id:
+                    products.append(line.product_id.id)
+            rec.product_ids = [(6, 0, products)]
