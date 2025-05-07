@@ -7,6 +7,7 @@ class StockPicking(models.Model):
     def generate_serial_no(self):
         for move in self.move_ids:
             seq_id = move.product_id.sequence_id
+
             product_qty = int(move.quantity)
             for _ in range(product_qty):
                 serial_no = seq_id.next_by_id()
