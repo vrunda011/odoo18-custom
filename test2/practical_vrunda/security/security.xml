@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+   <data>
+       <!-- Security Group -->
+       <record id="pharmacy_user_access" model="res.groups">
+           <field name="name">Pharmacy User</field>
+       </record>
+
+       <record id="pharmacy_admin_access" model="res.groups">
+           <field name="name">Pharmacy Admin</field>
+           <field name="implied_ids" eval="[(4, ref('pharmacy_user_access'))]"></field>
+       </record>
+
+       <record id="group_should_not_edit" model="res.groups">
+           <field name="name">Pharmacy SHOULD NOT</field>
+       </record>
+
+       <record id="group_should_edit" model="res.groups">
+           <field name="name">Pharmacy SHOULD</field>
+       </record>
+
+       <record id="group_sale_approver" model="res.groups">
+           <field name="name">Sale Approver</field>
+       </record>
+
+        <!-- record rules-->
+        <record id="pharmacy_should_create_rule" model="ir.rule">
+            <field name="name">User can create or edit any record</field>
+            <field name="model_id" ref="model_pr_pharmacy"/>
+            <field name="domain_force">[( 1, '=', 1 )]</field>
+            <field name="groups" eval="[(4, ref('practical_vrunda.group_should_edit'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="1"/>
+            <field name="perm_create" eval="1"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+       <record id="pharmacy_should_not_create_rule" model="ir.rule">
+            <field name="name">User cannot create or edit any record</field>
+            <field name="model_id" ref="model_pr_pharmacy"/>
+            <field name="domain_force">[( 1, '=', 1 )]</field>
+            <field name="groups" eval="[(4, ref('practical_vrunda.group_should_not_edit'))]"/>
+            <field name="perm_read" eval="1"/>
+            <field name="perm_write" eval="0"/>
+            <field name="perm_create" eval="0"/>
+            <field name="perm_unlink" eval="0"/>
+        </record>
+
+   </data>
+</odoo>

@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+practical_vrunda.access_add_product_wizard,access_add_product_wizard,practical_vrunda.model_add_product_wizard,base.group_user,1,1,1,1
+
+practical_vrunda.access_pharmacy_user,access_pharmacy_user,practical_vrunda.model_pr_pharmacy,practical_vrunda.pharmacy_user_access,1,1,1,0
+practical_vrunda.access_pharmacy_admin,access_pharmacy_admin,practical_vrunda.model_pr_pharmacy,practical_vrunda.pharmacy_admin_access,1,1,1,0

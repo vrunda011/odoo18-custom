@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <record id="pr_pharmacy_value1" model="pr.pharmacy">
+        <field name="name">Pharmalabs</field>
+    </record>
+    <record id="pr_pharmacy_value2" model="pr.pharmacy">
+        <field name="name">Wells</field>
+    </record>
+    <record id="pr_pharmacy_value3" model="pr.pharmacy">
+        <field name="name">N/A</field>
+    </record>
+</odoo>

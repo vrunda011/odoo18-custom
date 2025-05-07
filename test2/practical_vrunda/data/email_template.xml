@@ -1,0 +1,18 @@
+<odoo>
+    <record id="email_template_purchase_order" model="mail.template">
+        <field name="name">Purchase Order Action</field>
+        <field name="model_id" ref="practical_vrunda.model_purchase_order"/>
+        <field name="email_from">{{ object.env.user.email }}</field>
+        <field name="email_to">{{ object.partner_id.email }}</field>
+        <field name="subject">New Purchase Order: {{ object.name }}</field>
+        <field name="body_html" type="html">
+            <strong> <p >Hello <t t-out="object.partner_id.name"/>,</p></strong>
+            <p>Please check the new Purchase order <t t-out="object.name"/>.</p>
+            <p>The Amount total is $ <t t-out="object.amount_total"/>.</p>
+            <p>Please fulfill this order as soon as possible.</p>
+        </field>
+        <field name="report_template_ids" eval="[(4, ref('purchase.action_report_purchase_order'))]"/>
+<!--        <field name="lang">{{ object.partner_id.lang }}</field>-->
+        <field name="auto_delete" eval="True"/>
+    </record>
+</odoo>

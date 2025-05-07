@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <record id="pharmacy_list_view" model="ir.ui.view">
+        <field name="name">pharmacy.list.view</field>
+        <field name="model">pr.pharmacy</field>
+        <field name="arch" type="xml">
+            <list string="Pharmacy Details">
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_open_pharmacy" model="ir.actions.act_window">
+        <field name="name">Pharmacy</field>
+        <field name="res_model">pr.pharmacy</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="pharmacy_list_view"/>
+    </record>
+
+    <menuitem id="pr_pharmacy"
+              name="Pharmacy"
+              parent="sale.menu_sale_config"
+              sequence="21"
+              action="action_open_pharmacy"/>
+</odoo>
