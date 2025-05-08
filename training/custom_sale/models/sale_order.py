@@ -94,3 +94,45 @@ class SaleOrder(models.Model):
         vals = self.invoice_ids.action_register_payment()
         wizard = self.env['account.payment.register'].with_context(vals['context']).create({})
         wizard._create_payments()
+
+    def action_create_delivery(self):
+        for order in self:
+            location_ids = []
+            for line in order.order_line:
+                if line.location_id and line.location_id.id not in location_ids:
+                    location_ids.append(line.location_id.id)
+
+            for loc in location_ids:
+                vals = order.prepare_delivery_vals(loc)
+                stock_picking_id = self.env['stock.picking'].create(vals)
+                line_vals_list = order.prepare_delivery_line_vals(stock_picking_id, loc)
+                self.env['stock.move'].create(line_vals_list)
+
+    def prepare_delivery_vals(self, loc):
+        delivery_type_id = self.env['stock.picking.type'].search([('code', '=', 'outgoing')], limit=1)
+        values = {
+            'partner_id': self.partner_id.id,
+            'picking_type_id': delivery_type_id.id,
+            'location_id': loc,
+            'location_dest_id': delivery_type_id.default_location_dest_id.id,
+            'sale_id': self.id,
+            'origin': self.name
+        }
+        return values
+
+    def prepare_delivery_line_vals(self, stock_picking_id, loc):
+        line_vals_list = []
+        for line in self.order_line:
+            if line.location_id and line.location_id.id == loc:
+                line_vals = {
+                    'product_id': line.product_id.id,
+                    'product_uom_qty': line.product_uom_qty,
+                    'picking_id': stock_picking_id.id,
+                    'location_id': stock_picking_id.location_id.id,
+                    'location_dest_id': stock_picking_id.location_dest_id.id,
+                    'name': line.name,
+                    'sale_line_id': line.id
+                }
+                line_vals_list.append(line_vals)
+        return line_vals_list
+

@@ -6,18 +6,18 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='order_line']//list/field[@name='product_uom_qty']" position="after">
-                <field name="available_qty_wh"/>
-            </xpath>
-            <xpath expr="//field[@name='order_line']//list/field[@name='available_qty_wh']" position="after">
-                <field name="wh_location_ids"  widget="many2many_tags"/>
-            </xpath>
-            <xpath expr="//field[@name='order_line']//list/field[@name='wh_location_ids']" position="after">
-                <field name="available_qty_loc"/>
-            </xpath>
-            <xpath expr="//field[@name='order_line']//list/field[@name='available_qty_loc']" position="after">
-                <field name="extra_note"/>
-            </xpath>
+<!--            <xpath expr="//field[@name='order_line']//list/field[@name='product_uom_qty']" position="after">-->
+<!--                <field name="available_qty_wh"/>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//field[@name='order_line']//list/field[@name='available_qty_wh']" position="after">-->
+<!--                <field name="wh_location_ids"  widget="many2many_tags"/>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//field[@name='order_line']//list/field[@name='wh_location_ids']" position="after">-->
+<!--                <field name="available_qty_loc"/>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//field[@name='order_line']//list/field[@name='available_qty_loc']" position="after">-->
+<!--                <field name="extra_note"/>-->
+<!--            </xpath>-->
             <xpath expr="//field[@name='order_line']//list/field[@name='price_unit']" position="after">
                 <field name="previous_price"/>
             </xpath>
@@ -26,6 +26,12 @@
             </xpath>
             <xpath expr="//header" position="inside">
                 <button name="action_process_all" string="Process all" type="object" class="btn-primary"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']//list/field[@name='product_uom_qty']" position="after">
+                <field name="location_id"/>
+            </xpath>
+            <xpath expr="//header" position="inside">
+                <button name="action_create_delivery" string="Confirm Delivery" type="object" class="btn-primary"/>
             </xpath>
         </field>
     </record>
