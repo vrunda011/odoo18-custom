@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <record id="loan_team_form_view" model="ir.ui.view">
+        <field name="name">loan.team.form.view</field>
+        <field name="model">loan.team</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group string="Team Details">
+                            <field name="name"/>
+                        </group>
+                        <notebook>
+                            <page string="Levels">
+                                <field name="level_ids">
+                                    <list editable="bottom">
+                                        <field name="level_no"/>
+                                        <field name="name"/>
+                                        <field name="user_ids" widget="many2many_tags"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="loan_team_list_view" model="ir.ui.view">
+        <field name="name">loan.team.list.view</field>
+        <field name="model">loan.team</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_open_team_view" model="ir.actions.act_window">
+        <field name="name">Team</field>
+        <field name="res_model">loan.team</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="loan_config_menu" name="Configuration" parent="loan_main_menu"/>
+    <menuitem id="loan_team_menu" name="Team" parent="loan_config_menu" action="action_open_team_view"/>
+</odoo>

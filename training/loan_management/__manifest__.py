@@ -1,0 +1,20 @@
+{
+    'name': 'LMS',
+    'summary': """Loan Management System """,
+    "description": """This will manage loan details.""",
+    "author": "Bista Solutions Pvt.Ltd",
+    "license": "LGPL-3",
+    "version": "18.0",
+    "depends": ['base', 'product', 'sale', 'account'],
+    "data": [
+        'security/security.xml',
+        'security/ir.model.access.csv',
+        'data/email.template.xml',
+        'data/ir_cron.xml',
+        'data/product_data.xml',
+        'views/loan_views.xml',
+        'views/loan_rate_views.xml',
+        'views/account_move_views.xml',
+        'views/loan_team_views.xml',
+    ],
+}

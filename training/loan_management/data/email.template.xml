@@ -1,0 +1,15 @@
+<odoo>
+    <record id="email_template_loan_emi_reminder" model="mail.template">
+        <field name="name">Loan EMI Reminder</field>
+        <field name="model_id" ref="loan_management.model_loan_loan"/>
+        <field name="email_from">{{ object.env.user.email }}</field>
+        <field name="email_to">{{ object.partner_id.email }}</field>
+        <field name="subject">EMI Reminder: {{ object.partner_id.name }}</field>
+        <field name="body_html" type="html">
+            <strong> <p >Hello <t t-out="object.partner_id.name"/> </p></strong>
+
+            <p>Pay your EMI payment on <t t-out="object.emi_date"/>.</p>
+            <p>Thank you!</p>
+        </field>
+    </record>
+</odoo>

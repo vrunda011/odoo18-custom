@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <record id="loan_management_emi_product" model="product.product">
+        <field name="name">EMI Product</field>
+        <field name="type">service</field>
+    </record>
+</odoo>

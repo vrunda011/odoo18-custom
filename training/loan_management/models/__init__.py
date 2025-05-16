@@ -1,0 +1,7 @@
+from . import loan
+from . import loan_rate
+from . import loan_emi
+from . import account_move
+from . import loan_team
+from . import loan_approval_level
+from . import loan_team_approval_level
