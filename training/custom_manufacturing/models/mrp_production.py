@@ -21,3 +21,14 @@ class MrpProduction(models.Model):
         if self.state == 'done':
             self.serial_ids = [(3, self.lot_producing_id.id)]
         return res
+
+    def action_update_product(self):
+        view_id = self.env.ref('custom_manufacturing.update_product_wizard').id
+        return {
+            'name': 'Update Product/Serial',
+            'view_mode': 'form',
+            'res_model': 'update.product.wizard',
+            'view_id': view_id,
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+        }

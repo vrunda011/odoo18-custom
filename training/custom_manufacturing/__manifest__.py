@@ -10,7 +10,9 @@
         'security/ir.model.access.csv',
         'wizards/generate_serial_wizard_views.xml',
         'wizards/mo_report_wizard_views.xml',
+        'wizards/update_product_wizard.xml',
         'views/product_views.xml',
         'views/production_views.xml',
+        'views/production_list_view.xml',
     ],
 }

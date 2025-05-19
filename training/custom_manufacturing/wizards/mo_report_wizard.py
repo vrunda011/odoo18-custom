@@ -10,7 +10,7 @@ class MoReportWizard(models.TransientModel):
     start_date = fields.Date(String="Start Date")
     end_date = fields.Date(String="End Date")
 
-    # Excel Report
+    # Download Excel Report
     def action_print_mo_report(self):
         output = io.BytesIO()
         workbook = xlsxwriter.Workbook(output, {'in_memory': True})

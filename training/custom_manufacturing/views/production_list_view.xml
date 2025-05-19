@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <record id="production_list_view_inherit" model="ir.ui.view">
+        <field name="name">production.list.view.inherit</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_cancel']" position="after">
+                <button name="action_update_product" type="object" string="Update Product"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
