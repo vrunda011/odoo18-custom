@@ -36,3 +36,23 @@ class SaleOrderLine(models.Model):
             })
         return res
 
+    def _get_display_price(self):
+        base_price = super()._get_display_price()
+        special_pricelist_id = self.env['product.pricelist'].search([('is_special', '=', True)])
+        if special_pricelist_id:
+            special_pricelist_item_id = special_pricelist_id._get_product_rule(
+                self.product_id,
+                quantity=self.product_uom_qty or 1.0,
+                uom=self.product_uom,
+                date=self._get_order_date(),
+            )
+            special_rec = self.env['product.pricelist.item'].browse(special_pricelist_item_id)
+            speical_price = special_rec._compute_price(
+                        product=self.product_id,
+                        quantity=self.product_uom_qty or 1.0,
+                        uom=self.product_uom,
+                        date=self._get_order_date(),
+                        currency=self.currency_id,
+                        )
+            return max(base_price, speical_price)
+        return base_price

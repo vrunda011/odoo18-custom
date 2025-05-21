@@ -4,7 +4,7 @@
     "description": """""",
     "author": "Bista Solutions Pvt.Ltd",
     "version": "18.0",
-    "depends": ['base','product','sale','contacts','purchase'],
+    "depends": ['base','product','sale','contacts','purchase', 'stock'],
     "data": [
         'security/ir.model.access.csv',
         'views/sale_order_view.xml',
@@ -14,5 +14,6 @@
         'views/report.xml',
         'views/custom_sale_order_template.xml',
         'views/purchase_order_view.xml',
+        'views/product_pricelist_view.xml',
     ],
 }
