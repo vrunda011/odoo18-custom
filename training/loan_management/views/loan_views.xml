@@ -42,9 +42,9 @@
                             <field name="emi_date"/>
                             <field name="emi_amount"/>
                         </group>
-                        <group string="Loan Approval Details" invisible="loan_status != 'to_approve'">
-                            <field name="team_id" />
-                            <field name="next_approver_ids" widget="many2many_tags" />
+                        <group string="Loan Approval Details">
+                            <field name="team_id"/>
+                            <field name="next_approver_ids" widget="many2many_tags" invisible="loan_status != 'to_approve'"/>
                         </group>
                         <notebook>
                             <page string="Interest Rates">

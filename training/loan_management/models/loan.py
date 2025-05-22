@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from dateutil.relativedelta import relativedelta
 from odoo import models, fields, api
 from odoo.exceptions import UserError
@@ -22,15 +22,15 @@ class LoanManagement(models.Model):
     emi_lines = fields.One2many('loan.emi', 'loan_id', string='EMIs')
     current_interest_rate = fields.Float(string='Current Rate', copy=False)
     invoice_count = fields.Integer(string="Invoices", compute='_compute_invoice_count', default=0)
-    team_id = fields.Many2one('loan.team', string='Approval Team')
-    next_approver_ids = fields.Many2many('res.users', string='Next Approvers')
+    team_id = fields.Many2one('loan.team', string='Approval Team', copy=False)
+    next_approver_ids = fields.Many2many('res.users', string='Next Approvers', copy=False)
 
     approval_level_ids = fields.One2many('loan.approval.level','loan_id', string='Approval Levels')
     loan_status = fields.Selection([
                             ('draft', 'Draft'),
                             ('to_approve', 'To Approve'),
                             ('approved', 'Approved'),
-                            ('rejected', 'Rejected')], string='Status', default="draft")
+                            ('rejected', 'Rejected')], string='Status', default="draft", copy=False)
 
     is_user_approver = fields.Boolean(string='Is Current User Approver', compute='_compute_is_user_approver')
     current_level = fields.Integer(string='Current Approval Level')
@@ -77,13 +77,6 @@ class LoanManagement(models.Model):
 
     def action_calculate_emi_lines(self):
         if self.emi_date and self.emi_amount and self.rate_lines and self.loan_period:
-            # emi_date = self.emi_date
-            # principal_amt = self.pr_amount
-
-            # remaining_bal = principal_amt
-            # self.emi_lines.unlink()
-            # lines = [(5,0,0)]
-
             paid_lines = self.emi_lines.filtered(lambda l: l.status in ['paid', 'generated'])
             pending_lines = self.emi_lines.filtered(lambda l: l.status == 'pending')
 
@@ -92,7 +85,7 @@ class LoanManagement(models.Model):
             if paid_lines:
                 last_paid = max(paid_lines, key=lambda l: l.date)
                 emi_date = last_paid.date + relativedelta(months=1)
-                remaining_bal = last_paid.balance
+                remaining_bal = self.pr_amount - sum(self.emi_lines.filtered(lambda l: l.status != 'pending').mapped('total_payment'))
             else:
                 emi_date = self.emi_date
                 remaining_bal = self.pr_amount
@@ -123,7 +116,7 @@ class LoanManagement(models.Model):
 
     def _send_payment_reminder_today(self):
         today = date.today()
-        emi_line_ids = self.env['loan.emi'].search([('date', '=', today)])
+        emi_line_ids = self.env['loan.emi'].search([('date', '=', today), ('loan_id.loan_status', '=', 'approved')])
         emi_product = self.env.ref('loan_management.loan_management_emi_product').id
 
         for line in emi_line_ids:
@@ -131,7 +124,6 @@ class LoanManagement(models.Model):
                 'move_type': 'out_invoice',
                 'invoice_date': today,
                 'partner_id': line.loan_id.partner_id.id,
-                # 'invoice_origin': loan.partner_id,
                 'invoice_line_ids': [],
                 'loan_id': line.loan_id.id
             }
@@ -186,9 +178,6 @@ class LoanManagement(models.Model):
 
     def action_confirm(self):
         self.loan_status = 'to_approve'
-
-    @api.onchange('team_id')
-    def _onchange_team_id(self):
         level_lines = []
         level_lines = [(5, 0, 0)]
         for line in self.team_id.level_ids:
@@ -198,11 +187,12 @@ class LoanManagement(models.Model):
                 'user_ids': line.user_ids,
             }))
         self.approval_level_ids = level_lines
-        self.current_level = 1
 
         if self.approval_level_ids:
             first_level = self.approval_level_ids.filtered(lambda l: l.level_no == 1)
             self.next_approver_ids = first_level.user_ids
+
+        self.current_level = 1
 
     def button_approve(self):
         user = self.env.user
@@ -210,6 +200,8 @@ class LoanManagement(models.Model):
         if user in self.next_approver_ids:
             current_records = self.approval_level_ids.filtered(lambda l: l.level_no == self.current_level)
             current_records.stage = "approved"
+            current_records.approved_by = user.name
+            current_records.time = datetime.now()
 
             next_level_records = self.approval_level_ids.filtered(lambda l: l.level_no  ==self.current_level + 1)
             if next_level_records:
@@ -221,4 +213,17 @@ class LoanManagement(models.Model):
                 self.loan_status = 'approved'
 
     def button_reject(self):
-        pass
+        user = self.env.user
+
+        if user in self.next_approver_ids:
+            current_records = self.approval_level_ids.filtered(lambda l: l.level_no == self.current_level)
+            current_records.stage = "rejected"
+            current_records.rejected_by = user.name
+            current_records.time = datetime.now()
+
+            next_levels = self.approval_level_ids.filtered(lambda l: l.level_no > self.current_level)
+            for rec in next_levels:
+                rec.stage = "rejected"
+
+            self.next_approver_ids = [(5, 0, 0)]
+            self.loan_status = 'rejected'
