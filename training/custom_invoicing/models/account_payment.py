@@ -50,3 +50,14 @@ class AccountPayment(models.Model):
                     raise UserError('Total payment amount exceeds!')
 
             rec.remaining_amount = rec.amount - total_allocated_amount
+
+    def action_post(self):
+        res = super().action_post()
+        for payment in self:
+            move_lines = payment.move_id.line_ids
+            for payment_line in payment.invoice_payment_line_ids:
+                invoice_account_ids = payment_line.invoice_id.line_ids.mapped('account_id')
+                matching_line = move_lines.filtered(lambda l: l.account_id in invoice_account_ids)
+                if matching_line:
+                    payment_line.invoice_id.js_assign_outstanding_line(matching_line.id)
+        return res
