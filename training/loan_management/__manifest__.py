@@ -5,7 +5,7 @@
     "author": "Bista Solutions Pvt.Ltd",
     "license": "LGPL-3",
     "version": "18.0",
-    "depends": ['base', 'product', 'sale', 'account'],
+    "depends": ['base', 'product', 'sale', 'account', 'mail'],
     "data": [
         'security/security.xml',
         'security/ir.model.access.csv',

@@ -4,6 +4,7 @@ from odoo import models, fields, api
 from odoo.exceptions import UserError
 
 class LoanManagement(models.Model):
+    _inherit = 'mail.thread'
     _name = 'loan.loan'
     _description = 'Loan Details'
     _rec_name = 'partner_id'
@@ -24,6 +25,8 @@ class LoanManagement(models.Model):
     invoice_count = fields.Integer(string="Invoices", compute='_compute_invoice_count', default=0)
     team_id = fields.Many2one('loan.team', string='Approval Team', copy=False)
     next_approver_ids = fields.Many2many('res.users', string='Next Approvers', copy=False)
+    payment_ids = fields.One2many('loan.payment', 'loan_id', string='Pre Payments')
+    currency_id = fields.Many2one('res.currency', 'Currency', default=lambda self: self.env.company.currency_id)
 
     approval_level_ids = fields.One2many('loan.approval.level','loan_id', string='Approval Levels')
     loan_status = fields.Selection([
@@ -34,6 +37,7 @@ class LoanManagement(models.Model):
 
     is_user_approver = fields.Boolean(string='Is Current User Approver', compute='_compute_is_user_approver')
     current_level = fields.Integer(string='Current Approval Level')
+    bill_count = fields.Integer(string="Bills", compute='_compute_bill_count', default=0)
 
     @api.depends('next_approver_ids')
     def _compute_is_user_approver(self):
@@ -46,28 +50,41 @@ class LoanManagement(models.Model):
             if rec.start_date:
                 rec.end_date = rec.start_date + relativedelta(months=rec.loan_period)
 
-    @api.depends('pr_amount', 'loan_period', 'current_interest_rate')
+    @api.depends('pr_amount', 'loan_period', 'current_interest_rate', 'payment_ids', 'emi_lines')
     def _compute_emi_amount(self):
         for rec in self:
-            if rec.pr_amount:
-                if rec.current_interest_rate:
-                    monthly_rate = rec.current_interest_rate / 1200
+            if rec.pr_amount and rec.loan_period and rec.current_interest_rate:
+                monthly_rate = rec.current_interest_rate / 1200
 
-                    paid_lines = rec.emi_lines.filtered(lambda l: l.status in ['paid', 'generated'])
-                    if paid_lines:
-                        new_pr_amount = rec.pr_amount - sum(paid_lines.mapped('total_payment'))
-                        remaining_months = rec.loan_period - len(paid_lines)
-                        rec.emi_amount = (new_pr_amount * monthly_rate * (1 + monthly_rate) ** remaining_months) / (
-                                ((1 + monthly_rate) ** remaining_months) - 1)
-                    else:
-                        rec.emi_amount = (rec.pr_amount * monthly_rate * (1 + monthly_rate) ** rec.loan_period) / (
-                                    ((1 + monthly_rate) ** rec.loan_period) - 1)
+                paid_lines = rec.emi_lines.filtered(lambda l: l.status in ['paid', 'generated'])
+                advance_paid = sum(rec.payment_ids.filtered(lambda p: p.payment_status == 'paid').mapped('amount'))
+                principal_paid = sum(paid_lines.mapped('total_payment'))
+                remaining_principal = rec.pr_amount - principal_paid - advance_paid
+                remaining_months = rec.loan_period - len(paid_lines)
 
-    @api.depends('emi_amount', 'loan_period', 'pr_amount')
+                if remaining_principal > 0 and remaining_months > 0:
+                    rec.emi_amount = (remaining_principal * monthly_rate * (1 + monthly_rate) ** remaining_months) / \
+                                     (((1 + monthly_rate) ** remaining_months) - 1)
+                else:
+                    rec.emi_amount = (rec.pr_amount * monthly_rate * (1 + monthly_rate) ** rec.loan_period) / (
+                                ((1 + monthly_rate) ** rec.loan_period) - 1)
+
+    # @api.depends('emi_amount', 'loan_period', 'pr_amount')
+    # def _compute_interest_amount(self):
+    #     for rec in self:
+    #         if rec.emi_amount:
+    #             rec.interest_amount = ((rec.emi_amount * rec.loan_period)- rec.pr_amount)
+
+    @api.depends('emi_amount', 'loan_period', 'emi_lines', 'pr_amount', 'payment_ids')
     def _compute_interest_amount(self):
         for rec in self:
             if rec.emi_amount:
-                rec.interest_amount = ((rec.emi_amount * rec.loan_period)- rec.pr_amount)
+                paid_lines = rec.emi_lines.filtered(lambda l: l.status in ['paid', 'generated'])
+                remaining_months = rec.loan_period - len(paid_lines)
+                advance_paid = sum(rec.payment_ids.filtered(lambda p: p.payment_status == 'paid').mapped('amount'))
+                principal_remaining = rec.pr_amount - sum(paid_lines.mapped('paid_amt')) - advance_paid
+                total_emi = rec.emi_amount * remaining_months
+                rec.interest_amount = total_emi - principal_remaining
 
     @api.depends('interest_amount')
     def _compute_total_amount(self):
@@ -82,13 +99,18 @@ class LoanManagement(models.Model):
 
             pending_lines.unlink()
 
+            principal_paid = sum(paid_lines.mapped('total_payment'))
+            advance_paid = sum(self.payment_ids.filtered(lambda p: p.payment_status == 'paid').mapped('amount'))
+            remaining_bal = self.pr_amount - principal_paid - advance_paid
+
             if paid_lines:
                 last_paid = max(paid_lines, key=lambda l: l.date)
                 emi_date = last_paid.date + relativedelta(months=1)
-                remaining_bal = self.pr_amount - sum(self.emi_lines.filtered(lambda l: l.status != 'pending').mapped('total_payment'))
+                # remaining_bal = self.pr_amount - sum(self.emi_lines.filtered(lambda l: l.status != 'pending').mapped('total_payment'))
+
             else:
                 emi_date = self.emi_date
-                remaining_bal = self.pr_amount
+                # remaining_bal = self.pr_amount
 
             total_time = self.loan_period
             emi_amount = self.emi_amount
@@ -227,3 +249,30 @@ class LoanManagement(models.Model):
 
             self.next_approver_ids = [(5, 0, 0)]
             self.loan_status = 'rejected'
+
+    def _compute_bill_count(self):
+        for record in self:
+            record.bill_count = self.env['account.move'].search_count([('loan_id', '=', record.id)])
+
+    def action_open_bill(self):
+        pass
+        # form_view_id = self.env.ref('account.view_account_payment_form').id
+        # list_view_id = self.env.ref('account.view_account_payment_tree').id
+        #
+        # res = {
+        #     'name': 'Invoice',
+        #     'view_mode': 'form',
+        #     'res_model': 'account.payment',
+        #     'view_id': form_view_id,
+        #     'type': 'ir.actions.act_window',
+        #     'target': 'current',
+        # }
+        #
+        # # if self.bill_count >= 1:
+        # #     res['view_mode'] = 'list,form'
+        # #     res['views'] = [(list_view_id, 'list'), (form_view_id, 'form')]
+        # #     res['domain'] = ([('loan_id', '=', self.id)])
+        # #     res['view_id'] = False
+        #
+        # return res
+
