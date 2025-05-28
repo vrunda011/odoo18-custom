@@ -1,0 +1,14 @@
+<odoo>
+    <record id="email_template_reservation_confirmed" model="mail.template">
+        <field name="name">Confirmation of Room Reservation</field>
+        <field name="model_id" ref="model_hotel_reservation"/>
+        <field name="email_from">{{ object.env.user.email }}</field>
+        <field name="email_to">{{ object.guest_id.partner_id.email }}</field>
+        <field name="subject">Reservation Confirmed: {{ object.guest_id.partner_id.name }}</field>
+        <field name="body_html" type="html">
+            <p>Hello <strong><t t-out="object.guest_id.partner_id.name"/></strong>,</p>
+            <p>Your reservation <strong><t t-out="object.res_code"/></strong> has been successfully confirmed.</p>
+            <p>Thank you for choosing our service!</p>
+        </field>
+    </record>
+</odoo>

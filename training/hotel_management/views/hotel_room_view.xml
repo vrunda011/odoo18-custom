@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <!--Form View-->
+    <record id="hotel_room_form_view" model="ir.ui.view">
+        <field name="name">hotel.room.form.view</field>
+        <field name="model">hotel.room</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <widget name="web_ribbon" title="Available" invisible="status != 'available'"/>
+                    <widget name="web_ribbon" title="Occupied" invisible="status != 'occupied'"/>
+                    <widget name="web_ribbon" title="Under Maintenance" invisible="status != 'maintenance'"/>
+                    <widget name="web_ribbon" title="Reserved" invisible="status != 'reserved'"/>
+                    <!--Sequence code-->
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_mark_as_fixed"
+                                type="object"
+                                string="Mark as Fixed"
+                                class="btn-primary"
+                                invisible = "status != 'maintenance'"/>
+                    </div>
+
+
+                    <group>
+                        <group string="Basic Info">
+                            <field name="category_id"/>
+                            <field name="price_per_night"/>
+                        </group>
+                        <group string="Current Status">
+                            <field name="status"/>
+                            <field name="is_available" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Reservations">
+                            <field name="reservation_ids"/>
+                        </page>
+                        <page string="Cleaning Tasks">
+                            <field name="housekeeping_ids">
+                                <list editable="bottom">
+                                    <field name="partner_id"/>
+                                    <field name="scheduled_date"/>
+                                    <field name="status"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!--List View-->
+    <record id="hotel_room_list_view" model="ir.ui.view">
+        <field name="name">hotel.room.list.view</field>
+        <field name="model">hotel.room</field>
+        <field name="arch" type="xml">
+            <list string="Rooms">
+                <field name="category_id"/>
+                <field name="price_per_night"/>
+                <field name="status"/>
+                <field name="is_available"/>
+            </list>
+        </field>
+    </record>
+
+    <!--Menu action-->
+    <record id="action_hotel_room_view" model="ir.actions.act_window">
+        <field name="name">Room</field>
+        <field name="res_model">hotel.room</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!--Menu Item-->
+    <menuitem id="hotel_main_menu" name="Hotel Management"/>
+    <menuitem id="hotel_room_menu" name="Room" parent="hotel_main_menu"/>
+    <menuitem id="hotel_room_list_menu"
+              name="Rooms"
+              parent="hotel_room_menu"
+              action="action_hotel_room_view"
+              sequence="1"/>
+</odoo>

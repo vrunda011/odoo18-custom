@@ -1,0 +1,20 @@
+{
+    'name': 'Hotel Management',
+    'summary': """Hotel Management System""",
+    "description": """Hotel Management System""",
+    "author": "Bista Solutions Pvt.Ltd",
+    "license": "LGPL-3",
+    "version": "18.0",
+    "depends": ['base', 'mail'],
+    "data": [
+        'security/security.xml',
+        'security/ir.model.access.csv',
+        'data/ir_cron.xml',
+        'data/email_template.xml',
+        'views/hotel_room_view.xml',
+        'views/hotel_room_category_view.xml',
+        'views/hotel_guest_view.xml',
+        'views/hotel_reservation_view.xml',
+        'views/hotel_housekeeping_task_view.xml',
+    ],
+}

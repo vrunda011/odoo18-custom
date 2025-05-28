@@ -1,0 +1,72 @@
+<odoo>
+    <record id="hotel_guest_form_view" model="ir.ui.view">
+        <field name="name">hotel.guest.form</field>
+        <field name="model">hotel.guest</field>
+        <field name="arch" type="xml">
+            <form string="Guest">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Guest Profile">
+                            <field name="partner_id"/>
+                            <field name="nationality"/>
+                        </group>
+                        <group string="Contact Info">
+                            <field name="email"/>
+                            <field name="mobile"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hotel_guest_list_view" model="ir.ui.view">
+        <field name="name">hotel.guest.list</field>
+        <field name="model">hotel.guest</field>
+        <field name="arch" type="xml">
+            <list string="Guests">
+                <field name="partner_id"/>
+                <field name="nationality"/>
+                <field name="email"/>
+                <field name="mobile"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- kanban view -->
+    <record id="hotel_guest_view_kanban" model="ir.ui.view">
+       <field name="name">hotel.guest.view.kanban</field>
+       <field name="model">hotel.guest</field>
+       <field name="arch" type="xml">
+           <kanban class="o_kanban_mobile" sample="1" quick_create="true">
+               <templates>
+                   <t t-name="card">
+                       <div class="d-flex mb-2" style="justify-content: space-between;">
+                           <field name="name" class="fw-bolder fs-5" />
+                           <field name="partner_id" class="fw-bolder fs-5" />
+                       </div>
+                       <div class="text-muted">Email:
+                            <field name="email"/>
+                       </div>
+                       <div class="text-muted">Mobile:
+                           <field name="mobile"/>
+                       </div>
+                   </t>
+               </templates>
+           </kanban>
+       </field>
+   </record>
+
+    <record id="action_hotel_guest" model="ir.actions.act_window">
+        <field name="name">Guests</field>
+        <field name="res_model">hotel.guest</field>
+        <field name="view_mode">kanban,list,form</field>
+    </record>
+
+    <menuitem id="menu_hotel_guest" name="Guests" parent="hotel_main_menu" action="action_hotel_guest"/>
+</odoo>
