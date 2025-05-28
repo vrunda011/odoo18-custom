@@ -13,6 +13,7 @@ class UpdateProductWizard(models.TransientModel):
     file = fields.Binary(string='Upload File')
 
     product_line_ids = fields.One2many('product.detail', 'product_id', string='Products')
+    is_product_visible = fields.Boolean(string='Is Product Visible')
 
     def action_read_file(self):
 
@@ -30,7 +31,7 @@ class UpdateProductWizard(models.TransientModel):
                 'new_product': record[2],
             }))
         self.product_line_ids = line_ids
-
+        self.is_product_visible = True
 
         view_id = self.env.ref('custom_manufacturing.update_product_wizard').id
         return {

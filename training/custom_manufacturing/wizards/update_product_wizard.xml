@@ -14,7 +14,7 @@
                         <field name="file"/>
                     </group>
                     <notebook>
-                        <page string="Products">
+                        <page string="Products" invisible="not is_product_visible">
                             <field name="product_line_ids">
                                 <list>
                                     <field name="order_number"/>

@@ -7,8 +7,8 @@ class MoReportWizard(models.TransientModel):
     _name = 'mo.report.wizard'
     _description = 'Manufacturing Report'
 
-    start_date = fields.Date(String="Start Date")
-    end_date = fields.Date(String="End Date")
+    start_date = fields.Date(string="Start Date")
+    end_date = fields.Date(string="End Date")
 
     # Download Excel Report
     def action_print_mo_report(self):
