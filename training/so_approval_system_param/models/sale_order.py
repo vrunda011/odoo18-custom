@@ -9,12 +9,31 @@ class SaleOrder(models.Model):
         ],
     )
 
+    def _approval_allowed(self):
+        """Returns whether the order qualifies to be approved by the current user"""
+        self.ensure_one()
+        amount = self.env['ir.config_parameter'].sudo().get_param('so_approval.sale_min_amount')
+
+        if self.env['ir.config_parameter'].sudo().get_param('so_approval.is_sale_approval'):
+            return (self.amount_total < float(amount)
+                    or self.env.user.has_group('so_approval_system_param.group_sale_approver'))
+        else:
+            return True
+
+    def button_approve(self, force=False):
+        self.with_context(approved=True).action_confirm()
+
+        # to_approve_orders = self.filtered(lambda order: order._approval_allowed())
+        # if to_approve_orders:
+        #     super(SaleOrder, self).action_confirm()
+
     def action_confirm(self):
         if self._context.get('approved'):
             super(SaleOrder, self).action_confirm()
-
         else:
             for order in self:
+                if order.state not in ['draft', 'sent', 'to_approve']:
+                    continue
                 if order._approval_allowed():
                     order.button_approve()
                 else:
@@ -34,21 +53,3 @@ class SaleOrder(models.Model):
             return "A line on these orders missing a product, you cannot confirm it."
 
         return False
-
-    def button_approve(self, force=False):
-        self.with_context(approved=True).action_confirm()
-
-        # to_approve_orders = self.filtered(lambda order: order._approval_allowed())
-        # if to_approve_orders:
-        #     super(SaleOrder, self).action_confirm()
-
-    def _approval_allowed(self):
-        """Returns whether the order qualifies to be approved by the current user"""
-        self.ensure_one()
-        return (
-            self.company_id.so_double_validation == 'one_step'
-            or (self.company_id.so_double_validation == 'two_step'
-                and self.amount_total < self.env.company.currency_id._convert(
-                    self.company_id.so_double_validation_amount, self.currency_id, self.company_id,
-                    self.date_order or fields.Date.today()))
-            or self.env.user.has_group('sales_team.group_sale_manager'))

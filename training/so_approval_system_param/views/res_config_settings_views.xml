@@ -5,15 +5,15 @@
         <field name="name">res.config.settings.view.form.inherit.sale.approval</field>
         <field name="model">res.config.settings</field>
         <field name="priority" eval="25"/>
-        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="inherit_id" ref="sale.res_config_settings_view_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//setting[@id='proforma_configuration']" position="after">
-                    <setting id="so_order_approval" company_dependent="1" help="Request managers to approve orders above a minimum amount">
-                        <field name="so_order_approval"/>
-                        <div class="content-group" invisible="not so_order_approval">
+            <xpath expr="//block[@name='quotation_order_setting_container']//setting[@id='no_edit_order']" position="after">
+                    <setting id="sale_approval" help="Request managers to approve orders above a minimum amount">
+                        <field name="sale_approval"/>
+                        <div class="content-group" invisible="not sale_approval">
                             <div class="row mt16">
-                                <label for="so_double_validation_amount" class="col-lg-4 o_light_label"/>
-                                <field name="so_double_validation_amount"/>
+                                <label for="sale_min_amount" class="col-lg-4 o_light_label"/>
+                                <field name="sale_min_amount"/>
                             </div>
                         </div>
                     </setting>
