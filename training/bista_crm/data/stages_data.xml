@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<odoo>
-    <record id="crm_percentage_stage1" model="crm.percentage.stage">
+<odoo noupdate="1">
+    <record id="crm_percentage_stage1" model="crm.percentage.stage" forcecreate="False">
         <field name="name">stage1</field>
         <field name="percentage">10</field>
     </record>
